@@ -1,0 +1,131 @@
+[
+  {
+    "type": "/datum",
+    "parent": "",
+    "subtypes": [
+      "/atom"
+    ],
+    "vars": {
+      "tag": null
+    }
+  },
+  {
+    "type": "/atom",
+    "parent": "/datum",
+    "subtypes": [
+      "/area",
+      "/turf",
+      "/obj",
+      "/mob"
+    ],
+    "vars": {
+      "alpha": 255,
+      "appearance_flags": 0,
+      "blend_mode": 0,
+      "color": null,
+      "density": 0,
+      "desc": null,
+      "dir": 2,
+      "gender": "neuter",
+      "icon": null,
+      "icon_state": null,
+      "infra_luminosity": 0,
+      "invisibility": 0,
+      "layer": 1,
+      "luminosity": 0,
+      "maptext": null,
+      "maptext_width": 32,
+      "maptext_height": 32,
+      "maptext_x": 0,
+      "maptext_y": 0,
+      "mouse_drag_pointer": 0,
+      "mouse_drop_pointer": 1,
+      "mouse_drop_zone": 0,
+      "mouse_opacity": 1,
+      "mouse_over_pointer": 0,
+      "name": null,
+      "opacity": 0,
+      "overlays": "list()",
+      "override": 0,
+      "pixel_x": 0,
+      "pixel_y": 0,
+      "pixel_z": 0,
+      "plane": 0,
+      "suffix": null,
+      "transform": null,
+      "underlays": "list()",
+      "verbs": "list()"
+    }
+  },
+  {
+    "type": "/atom/movable",
+    "parent": "/atom",
+    "subtypes": [
+      "/obj",
+      "/mob"
+    ],
+    "vars": {
+      "animate_movement": 1,
+      "bound_x": 0,
+      "bound_y": 0,
+      "bound_width": 32,
+      "bound_height": 32,
+      "glide_size": 0,
+      "screen_loc": null,
+      "step_size": 32,
+      "step_x": 0,
+      "step_y": 0
+    }
+  },
+  {
+    "type": "/area",
+    "parent": "/atom",
+    "subtypes": [],
+    "vars": {
+      "layer": 1,
+      "luminosity": 1
+    }
+  },
+  {
+    "type": "/turf",
+    "parent": "/atom",
+    "subtypes": [],
+    "vars": {
+      "layer": 2
+    }
+  },
+  {
+    "type": "/obj",
+    "parent": "/atom/movable",
+    "subtypes": [],
+    "vars": {
+      "layer": 3
+    }
+  },
+  {
+    "type": "/mob",
+    "parent": "/atom/movable",
+    "subtypes": [],
+    "vars": {
+      "ckey": null,
+      "key": null,
+      "layer": 4,
+      "density": 1,
+      "see_in_dark": 2,
+      "see_infrared": 0,
+      "see_invisible": 0,
+      "sight": 0
+    }
+  },
+  {
+    "type": "/world",
+    "parent": "",
+    "subtypes": [],
+    "vars": {
+      "area": "/area",
+      "turf": "/turf",
+      "mob": "/mob",
+      "icon_size": 32
+    }
+  }
+]
