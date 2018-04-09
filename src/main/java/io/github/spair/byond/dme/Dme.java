@@ -2,7 +2,11 @@ package io.github.spair.byond.dme;
 
 import lombok.Data;
 
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.TreeMap;
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @SuppressWarnings("unused")

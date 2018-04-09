@@ -1,7 +1,14 @@
 package io.github.spair.byond.dme;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.ArrayDeque;
 import java.util.stream.Collectors;
 
 final class PreParser {
@@ -32,9 +39,7 @@ final class PreParser {
         StringBuilder text = new StringBuilder();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            String line;
-
-            while (Objects.nonNull(line = reader.readLine())) {
+            reader.lines().forEach(line -> {
                 text.append(line);
 
                 if (line.endsWith("\\")) {
@@ -42,7 +47,7 @@ final class PreParser {
                 } else {
                     text.append(NEW_LINE);
                 }
-            }
+            });
 
             text.append(NEW_LINE);
         } catch (IOException e) {
@@ -52,6 +57,7 @@ final class PreParser {
         return doParse(text.toString(), file.getName());
     }
 
+    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
     private List<FileLine> doParse(final String text, final String fileName) {
         Deque<Syntax> syntaxStack = new ArrayDeque<>();
         List<FileLine> fileLines = new ArrayList<>();
@@ -161,8 +167,8 @@ final class PreParser {
         fileLines.add(builder.build());
 
         if (syntaxStack.size() > 0) {
-            throw new RuntimeException("Syntax stack not empty in file " + fileName + "! Stack: " +
-                    syntaxStack + ".  Last line: " + lineNum + ", last col: " + colNum);
+            throw new RuntimeException("Syntax stack not empty in file " + fileName + "! Stack: "
+                    + syntaxStack + ".  Last line: " + lineNum + ", last col: " + colNum);
         }
 
         return fileLines.stream().filter(line -> !line.getText().isEmpty()).collect(Collectors.toList());

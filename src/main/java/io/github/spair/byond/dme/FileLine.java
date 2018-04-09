@@ -3,7 +3,7 @@ package io.github.spair.byond.dme;
 import lombok.Data;
 
 @Data
-class FileLine {
+final class FileLine {
 
     private static final int NO_INDENT = -1;
 
@@ -21,7 +21,7 @@ class FileLine {
         return indentLevel == NO_INDENT;
     }
 
-    static class Builder {
+    static final class Builder {
 
         private int indentLevel = NO_INDENT;
         private StringBuilder text = new StringBuilder();
@@ -51,7 +51,7 @@ class FileLine {
             return indentLevel == NO_INDENT;
         }
 
-        void setIndentLevel(int indentLevel) {
+        void setIndentLevel(final int indentLevel) {
             this.indentLevel = indentLevel;
         }
     }

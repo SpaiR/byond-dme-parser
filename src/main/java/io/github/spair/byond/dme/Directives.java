@@ -10,7 +10,7 @@ final class Directives {
     static final String IFNDEF = "ifndef";
     static final String IF = "if";
 
-    static class Hashed {
+    static final class Hashed {
         static final String ENDIF = "#endif";
         static final String UNDEF = "#undef";
         static final String IFDEF = "#ifdef";

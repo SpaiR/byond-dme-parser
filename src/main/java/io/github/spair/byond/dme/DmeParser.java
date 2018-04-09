@@ -1,7 +1,13 @@
 package io.github.spair.byond.dme;
 
 import java.io.File;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Deque;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +45,7 @@ public final class DmeParser {
         new PostParser(dme).parse();
     }
 
+    @SuppressWarnings("checkstyle:MagicNumber")
     private void doParse(final File file) {
         Map<String, String> macroses = dme.getMacroses();
 
@@ -164,6 +171,7 @@ public final class DmeParser {
         return fullPath.toString();
     }
 
+    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
     private String formTypeName(final String fullPath) {
         StringBuilder typeName = new StringBuilder();
 
