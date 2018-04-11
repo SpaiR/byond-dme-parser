@@ -18,6 +18,8 @@ public class DmeParserTest {
 
         assertTrue(!dme.getMacroses().isEmpty());
         assertTrue(!dme.getGlobalObject().getVars().isEmpty());
+
+        assertEquals("test_dmm.dmm", dme.getMapFiles().get(0));
     }
 
     @Test(expected = IllegalArgumentException.class)

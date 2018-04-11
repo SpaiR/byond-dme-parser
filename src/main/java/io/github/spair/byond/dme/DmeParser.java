@@ -17,7 +17,7 @@ public final class DmeParser {
     private static final String BYOND_DEF_FILE = "stddef.dm";
 
     private final Pattern directivesPattern = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
-    private final Pattern includePattern = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme))\"");
+    private final Pattern includePattern = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
     private final Pattern definePattern = Pattern.compile("^#define\\s+(\\w+)(?:\\([^)]*\\))?(?:\\s+(.+))?");
     private final Pattern varDefinitionPattern = Pattern.compile(
             "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
@@ -139,8 +139,13 @@ public final class DmeParser {
 
         if (matcher.find()) {
             String filePath = matcher.group(1);
-            dme.addIncludedFile(filePath);
-            doParse(new File(currentFile.getParent().concat("/").concat(filePath)));
+
+            if (filePath.endsWith(".dmm")) {
+                dme.addMapFile(filePath);
+            } else {
+                dme.addIncludedFile(filePath);
+                doParse(new File(currentFile.getParent().concat("/").concat(filePath)));
+            }
         }
     }
 
