@@ -74,10 +74,10 @@ final class PreParser {
             final char currentChar = text.charAt(charIndex);
             final char nextChar = text.charAt(charIndex + 1);
 
-            final Syntax currentSyntax = syntaxStack.size() > 0 ? syntaxStack.getLast() : null;
+            final Syntax currentSyntax = syntaxStack.size() > 0 ? syntaxStack.getLast() : Syntax.NULL;
 
-            final boolean inString = isString(currentSyntax) || isMultiString(currentSyntax);
-            final boolean inComment = isComment(currentSyntax) || isMultiComment(currentSyntax);
+            final boolean inString = currentSyntax.isString() || currentSyntax.isMultiString();
+            final boolean inComment = currentSyntax.isComment() || currentSyntax.isMultiComment();
 
             if (currentChar == BACKSLASH && nextChar != NEW_LINE && inString) {
                 builder.append(currentChar).append(nextChar);
@@ -89,7 +89,7 @@ final class PreParser {
                 colNum = 0;
                 indentLevel = 0;
 
-                if (inComment && isComment(currentSyntax)) {
+                if (inComment && currentSyntax.isComment()) {
                     syntaxStack.pollLast();
                 }
 
@@ -100,7 +100,7 @@ final class PreParser {
                     FileLine line = builder.build();
                     fileLines.add(line);
                     builder = FileLine.builder();
-                } else if (isMultiString(currentSyntax)) {
+                } else if (currentSyntax.isMultiString()) {
                     builder.append(NEW_LINE_ESCAPE);
                 } else if (!inString) {
                     builder.append(SPACE);
@@ -111,7 +111,7 @@ final class PreParser {
                 if (currentChar == SLASH && nextChar == STAR) {
                     syntaxStack.addLast(Syntax.MULTI_COMMENT);
                     charIndex++;
-                } else if (currentChar == STAR && nextChar == SLASH && isMultiComment(currentSyntax)) {
+                } else if (currentChar == STAR && nextChar == SLASH && currentSyntax.isMultiComment()) {
                     syntaxStack.pollLast();
                     charIndex++;
                 }
@@ -126,27 +126,27 @@ final class PreParser {
                 continue;
             } else if (currentChar == LEFT_BRACKET) {
                 syntaxStack.addLast(Syntax.BRACKETS);
-            } else if (isBrackets(currentSyntax) && currentChar == RIGHT_BRACKET) {
+            } else if (currentSyntax.isBrackets() && currentChar == RIGHT_BRACKET) {
                 syntaxStack.pollLast();
             } else if (!inString && currentChar == QUOTE) {
                 syntaxStack.addLast(Syntax.STRING);
-            } else if (isString(currentSyntax) && currentChar == QUOTE) {
+            } else if (currentSyntax.isString() && currentChar == QUOTE) {
                 syntaxStack.pollLast();
             } else if (!inString && currentChar == LEFT_PARENTHESIS) {
                 syntaxStack.addLast(Syntax.PARENTHESES);
-            } else if (isParentheses(currentSyntax) && currentChar == RIGHT_PARENTHESIS) {
+            } else if (currentSyntax.isParentheses() && currentChar == RIGHT_PARENTHESIS) {
                 syntaxStack.pollLast();
             } else if (currentChar == LEFT_FIGURE_BRACKET && nextChar == QUOTE && !inString) {
                 syntaxStack.addLast(Syntax.MULTI_STRING);
                 charIndex++;
                 builder.append(QUOTE_ESCAPE);
                 continue;
-            } else if (currentChar == QUOTE && nextChar == RIGHT_FIGURE_BRACKET && isMultiString(currentSyntax)) {
+            } else if (currentChar == QUOTE && nextChar == RIGHT_FIGURE_BRACKET && currentSyntax.isMultiString()) {
                 syntaxStack.pollLast();
                 charIndex++;
                 builder.append(QUOTE_ESCAPE);
                 continue;
-            } else if (currentChar == QUOTE && isMultiString(currentSyntax)) {
+            } else if (currentChar == QUOTE && currentSyntax.isMultiString()) {
                 builder.append(QUOTE_ESCAPE_EXTRA);
                 continue;
             }
@@ -174,33 +174,34 @@ final class PreParser {
         return fileLines.stream().filter(line -> !line.getText().isEmpty()).collect(Collectors.toList());
     }
 
-    private boolean isString(final Syntax syntax) {
-        return syntax == Syntax.STRING;
-    }
-
-    private boolean isMultiString(final Syntax syntax) {
-        return syntax == Syntax.MULTI_STRING;
-    }
-
-    private boolean isComment(final Syntax syntax) {
-        return syntax == Syntax.COMMENT;
-    }
-
-    private boolean isMultiComment(final Syntax syntax) {
-        return syntax == Syntax.MULTI_COMMENT;
-    }
-
-    private boolean isBrackets(final Syntax syntax) {
-        return syntax == Syntax.BRACKETS;
-    }
-
-    private boolean isParentheses(final Syntax syntax) {
-        return syntax == Syntax.PARENTHESES;
-    }
-
     private enum Syntax {
+        NULL,
         STRING, MULTI_STRING,
         COMMENT, MULTI_COMMENT,
-        BRACKETS, PARENTHESES
+        BRACKETS, PARENTHESES;
+
+        private boolean isString() {
+            return this == STRING;
+        }
+
+        private boolean isMultiString() {
+            return this == MULTI_STRING;
+        }
+
+        private boolean isComment() {
+            return this == COMMENT;
+        }
+
+        private boolean isMultiComment() {
+            return this == MULTI_COMMENT;
+        }
+
+        private boolean isBrackets() {
+            return this == BRACKETS;
+        }
+
+        private boolean isParentheses() {
+            return this == PARENTHESES;
+        }
     }
 }
