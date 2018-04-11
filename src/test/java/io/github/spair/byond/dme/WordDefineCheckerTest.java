@@ -22,9 +22,12 @@ public class WordDefineCheckerTest {
 
     @Test
     public void testCheckOnStringValue() {
-        Map<String, String> searchMap = new HashMap<String, String>() {{ put("WORD1", "value1"); }};
+        Map<String, String> searchMap = new HashMap<String, String>() {{ put("WORD1", "value1"); put("icon/path", "123"); }};
         String fullText = "\"This is string value with WORD1\"";
 
         assertEquals("\"This is string value with WORD1\"", WordDefineChecker.check(fullText, searchMap));
+
+        fullText = "'icon/path'";
+        assertEquals("'icon/path'", WordDefineChecker.check(fullText, searchMap));
     }
 }

@@ -29,7 +29,8 @@ final class WordDefineChecker {
     }
 
     private static boolean isStringValue(final String value) {
-        return value.startsWith("\"") && value.endsWith("\"");
+        return value.startsWith("\"") && value.endsWith("\"")
+                || value.startsWith("'") && value.endsWith("'");
     }
 
     private WordDefineChecker() {
