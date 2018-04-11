@@ -197,4 +197,10 @@ final class PreParser {
     private boolean isParentheses(final Syntax syntax) {
         return syntax == Syntax.PARENTHESES;
     }
+
+    private enum Syntax {
+        STRING, MULTI_STRING,
+        COMMENT, MULTI_COMMENT,
+        BRACKETS, PARENTHESES
+    }
 }
