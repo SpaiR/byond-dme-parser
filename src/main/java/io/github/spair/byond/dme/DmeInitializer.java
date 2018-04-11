@@ -40,7 +40,7 @@ final class DmeInitializer {
             final JsonArray subtypes = object.get(SUBTYPES).asArray();
             final JsonObject vars = object.get(VARS).asObject();
 
-            DmeItem item = new DmeItem(type);
+            DmeItem item = new DmeItem(type, dme);
 
             item.setParentPath(parent);
             subtypes.forEach(subtypeValue -> item.addSubtype(subtypeValue.asString()));

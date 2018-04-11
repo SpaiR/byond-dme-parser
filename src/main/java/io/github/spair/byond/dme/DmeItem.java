@@ -1,23 +1,47 @@
 package io.github.spair.byond.dme;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Objects;
 
 @Data
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class DmeItem {
+
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
+    private Dme environment;
 
     private String type;
     private Map<String, String> vars = new HashMap<>();
     private String parentPath = "";
     private Set<String> subtypes = new HashSet<>();
 
-    public DmeItem(final String type) {
+    public DmeItem(final String type, final Dme environment) {
         this.type = type;
+        this.environment = environment;
+    }
+
+    public boolean isType(final String typeToCompare) {
+        boolean result = type.equals(typeToCompare);
+
+        if (!result) {
+            DmeItem itemToCompare = environment.getItem(typeToCompare);
+            result = Objects.nonNull(itemToCompare) && itemToCompare.subtypes.contains(type);
+        }
+
+        return result;
+    }
+
+    public boolean isType(final DmeItem item) {
+        return isType(item.getType());
     }
 
     public void setVar(final String name, final String value) {
@@ -38,6 +62,10 @@ public class DmeItem {
 
     public String getVar(final String name) {
         return vars.get(name);
+    }
+
+    public void addSubtype(final DmeItem item) {
+        addSubtype(item.getType());
     }
 
     public void addSubtype(final String subtypePath) {

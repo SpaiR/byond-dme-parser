@@ -52,30 +52,30 @@ public class PostParserTest {
         Dme dme = new Dme();
         dme.addMacros("TEXT", "Text");
 
-        DmeItem global = new DmeItem(ByondTypes.GLOBAL);
+        DmeItem global = new DmeItem(ByondTypes.GLOBAL, dme);
         global.setNumberVar("NORTH", 1);
         dme.addItem(global);
 
-        DmeItem datum = new DmeItem("/datum");
+        DmeItem datum = new DmeItem("/datum", dme);
         datum.setVar("datumVar", "456");
         dme.addItem(datum);
 
-        DmeItem atom = new DmeItem("/atom");
+        DmeItem atom = new DmeItem("/atom", dme);
         atom.setVar("var1", "value1");
         atom.setVar("macrosVar", "Some TEXT goes here");
         atom.setVar("globalVar", "Current dir is NORTH");
         atom.setVar("textVar", "\"We have TEXT in the NORTH dir\"");
         dme.addItem(atom);
 
-        DmeItem atomChild = new DmeItem("/atom/child");
+        DmeItem atomChild = new DmeItem("/atom/child", dme);
         atomChild.setVar("var2", "value2");
         dme.addItem(atomChild);
 
-        DmeItem atomGrandchild = new DmeItem("/atom/child/grandchild");
+        DmeItem atomGrandchild = new DmeItem("/atom/child/grandchild", dme);
         atomGrandchild.setVar("var1", "value2-3");
         dme.addItem(atomGrandchild);
 
-        DmeItem intermediate = new DmeItem("/atom/intermediate/child");
+        DmeItem intermediate = new DmeItem("/atom/intermediate/child", dme);
         dme.addItem(intermediate);
 
         return dme;

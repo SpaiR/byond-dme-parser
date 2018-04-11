@@ -38,7 +38,7 @@ public class Dme {
     }
 
     public DmeItem getItemOrCreate(final String type) {
-        DmeItem item = items.getOrDefault(type, new DmeItem(type));
+        DmeItem item = items.getOrDefault(type, new DmeItem(type, this));
         items.putIfAbsent(type, item);
         return item;
     }

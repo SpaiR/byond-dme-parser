@@ -106,7 +106,7 @@ final class PostParser {
             if (additionalCreatedItems.containsKey(parentPath)) {
                 parent = additionalCreatedItems.get(parentPath);
             } else {
-                parent = new DmeItem(parentPath);
+                parent = new DmeItem(parentPath, dme);
                 connectParentAndChild(determineParent(parentPath), parent);
                 additionalCreatedItems.put(parentPath, parent);
             }

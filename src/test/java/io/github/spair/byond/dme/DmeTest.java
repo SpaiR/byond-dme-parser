@@ -20,7 +20,7 @@ public class DmeTest {
     @Test
     public void testGetGlobalObject() {
         Dme dme = new Dme();
-        dme.addItem(new DmeItem(ByondTypes.GLOBAL));
+        dme.addItem(new DmeItem(ByondTypes.GLOBAL, dme));
 
         assertEquals(ByondTypes.GLOBAL, dme.getGlobalObject().getType());
     }
