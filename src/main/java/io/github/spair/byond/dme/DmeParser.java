@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 public final class DmeParser {
 
     private static final String DME_SUFFIX = ".dme";
+    private static final String DMM_SUFFIX = ".dmm";
     private static final String BYOND_DEF_FILE = "stddef.dm";
 
     private final Pattern directivesPattern = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
@@ -140,7 +141,7 @@ public final class DmeParser {
         if (matcher.find()) {
             String filePath = matcher.group(1);
 
-            if (filePath.endsWith(".dmm")) {
+            if (filePath.endsWith(DMM_SUFFIX)) {
                 dme.addMapFile(filePath);
             } else {
                 dme.addIncludedFile(filePath);
