@@ -14,7 +14,7 @@ public class Dme {
 
     private Map<String, String> macroses = new HashMap<>();
     private List<String> includedFiles = new ArrayList<>();
-    private List<String> mapFiles = new ArrayList<>();
+    private List<MapFile> mapFiles = new ArrayList<>();
     private Map<String, DmeItem> items = new TreeMap<>();
 
     public void addMacros(final String name, final String value) {
@@ -30,7 +30,7 @@ public class Dme {
     }
 
     public void addMapFile(final String filePath) {
-        mapFiles.add(filePath);
+        mapFiles.add(new MapFile(filePath));
     }
 
     public void addItem(final DmeItem item) {

@@ -1,2 +1,3 @@
 #include "test_dm.dm"
 #include "test_dmm.dmm"
+#include "path/to/dmm/map.dmm"
