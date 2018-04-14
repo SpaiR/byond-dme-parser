@@ -76,8 +76,8 @@ final class PreParser {
 
             final Syntax currentSyntax = syntaxStack.size() > 0 ? syntaxStack.getLast() : Syntax.NULL;
 
-            final boolean inString = currentSyntax.isString() || currentSyntax.isMultiString();
-            final boolean inComment = currentSyntax.isComment() || currentSyntax.isMultiComment();
+            final boolean inString = currentSyntax == Syntax.STRING || currentSyntax == Syntax.MULTI_STRING;
+            final boolean inComment = currentSyntax == Syntax.COMMENT || currentSyntax == Syntax.MULTI_COMMENT;
 
             if (currentChar == BACKSLASH && nextChar != NEW_LINE && inString) {
                 builder.append(currentChar).append(nextChar);
@@ -89,7 +89,7 @@ final class PreParser {
                 colNum = 0;
                 indentLevel = 0;
 
-                if (inComment && currentSyntax.isComment()) {
+                if (inComment && currentSyntax == Syntax.COMMENT) {
                     syntaxStack.pollLast();
                 }
 
@@ -100,7 +100,7 @@ final class PreParser {
                     FileLine line = builder.build();
                     fileLines.add(line);
                     builder = FileLine.builder();
-                } else if (currentSyntax.isMultiString()) {
+                } else if (currentSyntax == Syntax.MULTI_STRING) {
                     builder.append(NEW_LINE_ESCAPE);
                 } else if (!inString) {
                     builder.append(SPACE);
@@ -111,7 +111,7 @@ final class PreParser {
                 if (currentChar == SLASH && nextChar == STAR) {
                     syntaxStack.addLast(Syntax.MULTI_COMMENT);
                     charIndex++;
-                } else if (currentChar == STAR && nextChar == SLASH && currentSyntax.isMultiComment()) {
+                } else if (currentChar == STAR && nextChar == SLASH && currentSyntax == Syntax.MULTI_COMMENT) {
                     syntaxStack.pollLast();
                     charIndex++;
                 }
@@ -126,27 +126,28 @@ final class PreParser {
                 continue;
             } else if (currentChar == LEFT_BRACKET) {
                 syntaxStack.addLast(Syntax.BRACKETS);
-            } else if (currentSyntax.isBrackets() && currentChar == RIGHT_BRACKET) {
+            } else if (currentSyntax == Syntax.BRACKETS && currentChar == RIGHT_BRACKET) {
                 syntaxStack.pollLast();
             } else if (!inString && currentChar == QUOTE) {
                 syntaxStack.addLast(Syntax.STRING);
-            } else if (currentSyntax.isString() && currentChar == QUOTE) {
+            } else if (currentSyntax == Syntax.STRING && currentChar == QUOTE) {
                 syntaxStack.pollLast();
             } else if (!inString && currentChar == LEFT_PARENTHESIS) {
                 syntaxStack.addLast(Syntax.PARENTHESES);
-            } else if (currentSyntax.isParentheses() && currentChar == RIGHT_PARENTHESIS) {
+            } else if (currentSyntax == Syntax.PARENTHESES && currentChar == RIGHT_PARENTHESIS) {
                 syntaxStack.pollLast();
             } else if (currentChar == LEFT_FIGURE_BRACKET && nextChar == QUOTE && !inString) {
                 syntaxStack.addLast(Syntax.MULTI_STRING);
                 charIndex++;
                 builder.append(QUOTE_ESCAPE);
                 continue;
-            } else if (currentChar == QUOTE && nextChar == RIGHT_FIGURE_BRACKET && currentSyntax.isMultiString()) {
+            } else if (currentChar == QUOTE && nextChar == RIGHT_FIGURE_BRACKET
+                    && currentSyntax == Syntax.MULTI_STRING) {
                 syntaxStack.pollLast();
                 charIndex++;
                 builder.append(QUOTE_ESCAPE);
                 continue;
-            } else if (currentChar == QUOTE && currentSyntax.isMultiString()) {
+            } else if (currentChar == QUOTE && currentSyntax == Syntax.MULTI_STRING) {
                 builder.append(QUOTE_ESCAPE_EXTRA);
                 continue;
             }
@@ -178,30 +179,6 @@ final class PreParser {
         NULL,
         STRING, MULTI_STRING,
         COMMENT, MULTI_COMMENT,
-        BRACKETS, PARENTHESES;
-
-        private boolean isString() {
-            return this == STRING;
-        }
-
-        private boolean isMultiString() {
-            return this == MULTI_STRING;
-        }
-
-        private boolean isComment() {
-            return this == COMMENT;
-        }
-
-        private boolean isMultiComment() {
-            return this == MULTI_COMMENT;
-        }
-
-        private boolean isBrackets() {
-            return this == BRACKETS;
-        }
-
-        private boolean isParentheses() {
-            return this == PARENTHESES;
-        }
+        BRACKETS, PARENTHESES
     }
 }
