@@ -1,6 +1,6 @@
 package io.github.spair.byond.dme;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class ByondTypes {
 
     public static final String NULL = "null";

@@ -1,9 +1,10 @@
 package io.github.spair.byond.dme;
 
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.Getter;
+import lombok.ToString;
 import lombok.Setter;
+import lombok.Getter;
+import lombok.AccessLevel;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.HashSet;
 import java.util.Objects;
 
 @Data
+@ToString(exclude = "environment")
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class DmeItem {
 

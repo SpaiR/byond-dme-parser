@@ -74,7 +74,7 @@ final class PreParser {
             final char currentChar = text.charAt(charIndex);
             final char nextChar = text.charAt(charIndex + 1);
 
-            final Syntax currentSyntax = syntaxStack.size() > 0 ? syntaxStack.getLast() : Syntax.NULL;
+            final Syntax currentSyntax = syntaxStack.size() > 0 ? syntaxStack.getLast() : null;
 
             final boolean inString = currentSyntax == Syntax.STRING || currentSyntax == Syntax.MULTI_STRING;
             final boolean inComment = currentSyntax == Syntax.COMMENT || currentSyntax == Syntax.MULTI_COMMENT;
@@ -176,7 +176,6 @@ final class PreParser {
     }
 
     private enum Syntax {
-        NULL,
         STRING, MULTI_STRING,
         COMMENT, MULTI_COMMENT,
         BRACKETS, PARENTHESES

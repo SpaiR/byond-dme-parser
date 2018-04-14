@@ -1,3 +1,4 @@
 #include "test_dm.dm"
 #include "test_dmm.dmm"
+#include "sub-dir/sub-include.dm"
 #include "path/to/dmm/map.dmm"

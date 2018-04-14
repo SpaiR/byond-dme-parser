@@ -17,7 +17,7 @@ final class FileLine {
         return new Builder();
     }
 
-    public boolean hasNoIndent() {
+    boolean hasNoIndent() {
         return indentLevel == NO_INDENT;
     }
 

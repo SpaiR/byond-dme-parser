@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public final class DmeParser {
 
     private static final String DME_SUFFIX = ".dme";
@@ -24,8 +25,8 @@ public final class DmeParser {
             "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
 
     private final PreParser preParser = new PreParser();
-
     private List<String> pathTree = new ArrayList<>();
+
     private Dme dme = DmeInitializer.initialize(new Dme());
 
     public static Dme parse(final File dmeFile) {
@@ -140,12 +141,13 @@ public final class DmeParser {
 
         if (matcher.find()) {
             String filePath = matcher.group(1);
+            String fullFilePath = currentFile.getParent().replace('\\', '/') + '/' + filePath;
 
             if (filePath.endsWith(DMM_SUFFIX)) {
-                dme.addMapFile(filePath);
+                dme.addMapFile(fullFilePath);
             } else {
-                dme.addIncludedFile(filePath);
-                doParse(new File(currentFile.getParent().concat("/").concat(filePath)));
+                dme.addIncludedFile(fullFilePath);
+                doParse(new File(fullFilePath));
             }
         }
     }
