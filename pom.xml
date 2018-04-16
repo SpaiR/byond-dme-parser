@@ -7,6 +7,40 @@
     <version>0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Parser to deserialize BYOND object tree.</description>
+    <url>https://spair.github.io/byond-dme-parser</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>SpaiR</id>
+            <name>Ilya Prymshyts</name>
+            <email>klimbetoo@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/SpaiR/byond-dme-parser.git</connection>
+        <developerConnection>scm:git:https://github.com/SpaiR/byond-dme-parser.git</developerConnection>
+        <url>https://github.com/SpaiR/byond-dme-parser/tree/master</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-spair-io.github.spair</id>
+            <name>SpaiR-io.github.spair</name>
+            <url>https://api.bintray.com/maven/spair/io.github.spair/byond-dme-parser/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -63,6 +97,66 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.16.20.0</version>
+                <executions>
+                    <execution>
+                        <id>delombok</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sourceDirectory>src/main/java</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/delombok</outputDirectory>
+                    <addOutputDirectory>false</addOutputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.0.0-M1</version>
+                <configuration>
+                    <sourcepath>target/delombok</sourcepath>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <tagBase>git://github.com/SpaiR/byond-dme-parser/tags</tagBase>
+                    <branchBase>git://github.com/SpaiR/byond-dme-parser/branches</branchBase>
+                    <preparationGoals>clean package</preparationGoals>
+                    <goals>deploy</goals>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
             </plugin>
         </plugins>
     </build>
