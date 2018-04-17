@@ -13,7 +13,7 @@ Library to parse BYOND project and deserialize whole object tree into `Dme.class
 Some functionality, like expression evaluation isn't implemented yet. It may be provided in the future.
 
 ## Installation
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.spair/byond-dme-parser.svg?style=flat)](https://mvnrepository.com/artifact/io.github.spair/byond-dme-parser)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.spair/byond-dme-parser.svg?style=flat)](http://search.maven.org/#search|ga|1|byond-dme-parser)
 [![JCenter](https://img.shields.io/bintray/v/spair/io.github.spair/byond-dme-parser.svg?label=jcenter)](https://bintray.com/spair/io.github.spair/byond-dme-parser/_latestVersion)
 
 Library deployed to Maven Central and JCenter repositories.
