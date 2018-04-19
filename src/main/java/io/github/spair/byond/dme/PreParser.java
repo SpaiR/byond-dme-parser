@@ -13,9 +13,6 @@ import java.util.stream.Collectors;
 
 final class PreParser {
 
-    PreParser() {
-    }
-
     private static final char NEW_LINE = '\n';
     private static final char SLASH = '/';
     private static final char BACKSLASH = '\\';

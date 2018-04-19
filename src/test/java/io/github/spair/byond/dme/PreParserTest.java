@@ -2,10 +2,9 @@ package io.github.spair.byond.dme;
 
 import org.junit.Test;
 
-import java.io.File;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PreParserTest {
 

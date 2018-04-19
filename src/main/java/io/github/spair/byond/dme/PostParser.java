@@ -21,12 +21,16 @@ final class PostParser {
     private final List<DmeItem> roots = new ArrayList<>();
     private final Set<String> itemsWithLookedVars = new HashSet<>();
 
-    PostParser(final Dme dme) {
+    private PostParser(final Dme dme) {
         this.dme = dme;
         this.globalVars = dme.getGlobalObject().getVars();
     }
 
-    void parse() {
+    static void parse(final Dme dme) {
+        new PostParser(dme).doParse();
+    }
+
+    private void doParse() {
         dme.getItems().forEach((type, item) -> {
             if (notGlobalObject(type)) {
                 assignParent(item);

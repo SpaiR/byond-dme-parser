@@ -7,10 +7,10 @@ final class ResourceUtil {
 
     private static final ClassLoader CLASS_LOADER = ResourceUtil.class.getClassLoader();
 
-    private ResourceUtil() {
-    }
-
     static File loadFile(final String path) {
         return new File(Objects.requireNonNull(CLASS_LOADER.getResource(path)).getFile());
+    }
+
+    private ResourceUtil() {
     }
 }

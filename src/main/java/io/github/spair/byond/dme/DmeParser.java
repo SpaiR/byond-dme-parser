@@ -18,10 +18,10 @@ public final class DmeParser {
     private static final String DMM_SUFFIX = ".dmm";
     private static final String BYOND_DEF_FILE = "stddef.dm";
 
-    private final Pattern directivesPattern = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
-    private final Pattern includePattern = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
-    private final Pattern definePattern = Pattern.compile("^#define\\s+(\\w+)(?:\\([^)]*\\))?(?:\\s+(.+))?");
-    private final Pattern varDefinitionPattern = Pattern.compile(
+    private static final Pattern DIRECTIVES = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
+    private static final Pattern INCLUDE = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
+    private static final Pattern DEFINE = Pattern.compile("^#define\\s+(\\w+)(?:\\([^)]*\\))?(?:\\s+(.+))?");
+    private static final Pattern VAR_DEFINITION = Pattern.compile(
             "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
 
     private final PreParser preParser = new PreParser();
@@ -35,16 +35,13 @@ public final class DmeParser {
 
             parser.doParse(ResourceUtil.loadFile(BYOND_DEF_FILE));
             parser.doParse(dmeFile);
-            parser.postParse();
+
+            PostParser.parse(parser.dme);
 
             return parser.dme;
         } else {
             throw new IllegalArgumentException("Parser only accept '.dme' files");
         }
-    }
-
-    private void postParse() {
-        new PostParser(dme).parse();
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
@@ -66,7 +63,7 @@ public final class DmeParser {
                     preProcessBlocked--;
                 }
 
-                Matcher matcher = directivesPattern.matcher(lineText);
+                Matcher matcher = DIRECTIVES.matcher(lineText);
 
                 if (matcher.find()) {
                     final String macrosValue = matcher.group(2);
@@ -112,7 +109,7 @@ public final class DmeParser {
             final String type = formTypeName(fullPath);
 
             DmeItem dmeItem = dme.getItemOrCreate(type);
-            Matcher varMatcher = varDefinitionPattern.matcher(fullPath);
+            Matcher varMatcher = VAR_DEFINITION.matcher(fullPath);
 
             if (varMatcher.find()) {
                 final String value = varMatcher.group(2);
@@ -128,7 +125,7 @@ public final class DmeParser {
     }
 
     private void addNewMacrosValueIfExist(final String lineText) {
-        Matcher matcher = definePattern.matcher(lineText);
+        Matcher matcher = DEFINE.matcher(lineText);
 
         if (matcher.find() && Objects.nonNull(matcher.group(2))) {
             String macrosValue = matcher.group(2).replace("$", "\\$");
@@ -137,7 +134,7 @@ public final class DmeParser {
     }
 
     private void parseIncludedFileIfExist(final String lineText, final File currentFile) {
-        Matcher matcher = includePattern.matcher(lineText);
+        Matcher matcher = INCLUDE.matcher(lineText);
 
         if (matcher.find()) {
             String filePath = matcher.group(1);

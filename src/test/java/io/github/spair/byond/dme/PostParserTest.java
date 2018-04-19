@@ -2,16 +2,14 @@ package io.github.spair.byond.dme;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 public class PostParserTest {
 
     @Test
-    public void testParse() {
+    public void testDoParse() {
         Dme dme = prepareDme();
-        new PostParser(dme).parse();
+        PostParser.parse(dme);
 
         DmeItem datum = dme.getItem("/datum");
         assertEquals("456", datum.getVar("datumVar"));
