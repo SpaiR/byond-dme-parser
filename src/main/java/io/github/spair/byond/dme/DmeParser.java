@@ -138,7 +138,7 @@ public final class DmeParser {
 
         if (matcher.find()) {
             String filePath = matcher.group(1);
-            String fullFilePath = currentFile.getParent().replace('\\', '/') + '/' + filePath;
+            String fullFilePath = (currentFile.getParent() + '/' + filePath).replace('\\', '/');
 
             if (filePath.endsWith(DMM_SUFFIX)) {
                 dme.addMapFile(fullFilePath);
@@ -176,7 +176,6 @@ public final class DmeParser {
         return fullPath.toString();
     }
 
-    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
     private String formTypeName(final String fullPath) {
         StringBuilder typeName = new StringBuilder();
 

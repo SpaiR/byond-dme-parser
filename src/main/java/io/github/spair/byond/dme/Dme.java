@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Data
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings("WeakerAccess")
 public class Dme {
 
     private Map<String, String> macroses = new HashMap<>();

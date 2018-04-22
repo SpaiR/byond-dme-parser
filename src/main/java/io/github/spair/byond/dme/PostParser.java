@@ -40,20 +40,13 @@ final class PostParser {
         });
 
         addAdditionalItemsToDme();
-        executeConcurrentTasks();
-    }
 
-    private void executeConcurrentTasks() {
-        List<Callable<Void>> taskList = Arrays.asList(this::assignAllSubtypesFromRoots, this::lookupAllParentsVars);
-        ExecutorService executor = Executors.newWorkStealingPool(taskList.size());
-
-        try {
-            executor.invokeAll(taskList);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
-            executor.shutdown();
-        }
+        executeConcurrentTasks(
+                Arrays.asList(
+                        this::assignAllSubtypesFromRoots,
+                        this::lookupAllParentsVars
+                )
+        );
     }
 
     private void assignParent(final DmeItem item) {
@@ -145,7 +138,21 @@ final class PostParser {
         return !ByondTypes.GLOBAL.equals(type);
     }
 
+    // During parent determining additional items are created. They are not declared in project,
+    // and exist in form of intermediate objects, but they should exist in Dme.
     private void addAdditionalItemsToDme() {
         additionalCreatedItems.values().forEach(dme::addItem);
+    }
+
+    private void executeConcurrentTasks(final List<Callable<Void>> tasks) {
+        final ExecutorService executor = Executors.newWorkStealingPool(tasks.size());
+
+        try {
+            executor.invokeAll(tasks);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            executor.shutdown();
+        }
     }
 }

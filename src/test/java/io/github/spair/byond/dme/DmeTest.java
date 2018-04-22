@@ -25,4 +25,12 @@ public class DmeTest {
 
         assertEquals(ByondTypes.GLOBAL, dme.getGlobalObject().getType());
     }
+
+    @Test
+    public void testGetMacros() {
+        Dme dme = new Dme();
+        dme.addMacros("v", "V");
+
+        assertEquals("V", dme.getMacros("v"));
+    }
 }

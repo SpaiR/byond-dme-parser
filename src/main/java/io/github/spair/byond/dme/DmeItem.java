@@ -14,7 +14,7 @@ import java.util.Objects;
 
 @Data
 @ToString(exclude = "environment")
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings("WeakerAccess")
 public class DmeItem {
 
     @Setter(AccessLevel.NONE)

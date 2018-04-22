@@ -54,7 +54,6 @@ final class PreParser {
         return doParse(text.toString(), file.getName());
     }
 
-    @SuppressWarnings("checkstyle:AvoidInlineConditionals")
     private List<FileLine> doParse(final String text, final String fileName) {
         Deque<Syntax> syntaxStack = new ArrayDeque<>();
         List<FileLine> fileLines = new ArrayList<>();
