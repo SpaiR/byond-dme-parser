@@ -16,7 +16,6 @@ public final class DmeParser {
 
     private static final String DME_SUFFIX = ".dme";
     private static final String DMM_SUFFIX = ".dmm";
-    private static final String BYOND_DEF_FILE = "stddef.dm";
 
     private static final Pattern DIRECTIVES = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
     private static final Pattern INCLUDE = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
@@ -33,9 +32,7 @@ public final class DmeParser {
         if (dmeFile.isFile() && dmeFile.getName().endsWith(DME_SUFFIX)) {
             DmeParser parser = new DmeParser();
 
-            parser.doParse(ResourceUtil.loadFile(BYOND_DEF_FILE));
             parser.doParse(dmeFile);
-
             PostParser.parse(parser.dme);
 
             return parser.dme;

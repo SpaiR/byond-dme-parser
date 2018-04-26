@@ -1,131 +1,394 @@
-[
-  {
-    "type": "/datum",
-    "parent": "",
-    "subtypes": [
-      "/atom"
-    ],
-    "vars": {
-      "tag": null
-    }
+{
+  "macroses": {
+    "SEEINVIS": 2,
+    "SEEMOBS": 4,
+    "SEEOBJS": 8,
+    "SEETURFS": 16,
+
+    "NO_STEPS": 0,
+    "FORWARD_STEPS": 1,
+    "SLIDE_STEPS": 2,
+    "SYNC_STEPS": 3,
+
+    "LONG_GLIDE": 1,
+    "RESET_COLOR": 2,
+    "RESET_ALPHA": 4,
+    "RESET_TRANSFORM": 8,
+    "NO_CLIENT_COLOR": 16,
+    "KEEP_TOGETHER": 32,
+    "KEEP_APART": 64,
+    "PLANE_MASTER": 128,
+    "TILE_BOUND": 256,
+
+    "CONTROL_FREAK_ALL": 1,
+    "CONTROL_FREAK_SKIN": 2,
+    "CONTROL_FREAK_MACROS": 4,
+
+    "ICON_ADD": 0,
+    "ICON_SUBTRACT": 1,
+    "ICON_MULTIPLY": 2,
+    "ICON_OVERLAY": 3,
+    "ICON_AND": 4,
+    "ICON_OR": 5,
+    "ICON_UNDERLAY": 6,
+
+    "MATRIX_COPY": 0,
+    "MATRIX_MULTIPLY": 1,
+    "MATRIX_ADD": 2,
+    "MATRIX_SUBTRACT": 3,
+    "MATRIX_INVERT": 4,
+    "MATRIX_ROTATE": 5,
+    "MATRIX_SCALE": 6,
+    "MATRIX_TRANSLATE": 7,
+    "MATRIX_INTERPOLATE": 8,
+    "MATRIX_MODIFY": 128,
+
+    "LINEAR_EASING": 0,
+    "SINE_EASING": 1,
+    "CIRCULAR_EASING": 2,
+    "CUBIC_EASING": 3,
+    "BOUNCE_EASING": 4,
+    "ELASTIC_EASING": 5,
+    "BACK_EASING": 6,
+    "QUAD_EASING": 7,
+    "EASE_IN": 64,
+    "EASE_OUT": 128,
+
+    "ANIMATION_END_NOW": 1,
+    "ANIMATION_LINEAR_TRANSFORM": 2,
+    "ANIMATION_PARALLEL": 4,
+
+    "DATABASE_OPEN": 0,
+    "DATABASE_CLOSE": 1,
+    "DATABASE_ERROR_CODE": 2,
+    "DATABASE_ERROR": 3,
+    "DATABASE_QUERY_CLEAR": 4,
+    "DATABASE_QUERY_ADD": 5,
+    "DATABASE_QUERY_EXEC": 8,
+    "DATABASE_QUERY_NEXT": 9,
+    "DATABASE_QUERY_ABORT": 10,
+    "DATABASE_QUERY_RESET": 11,
+    "DATABASE_QUERY_ROWS_AFFECTED": 12,
+    "DATABASE_ROW_COLUMN_NAMES": 16,
+    "DATABASE_ROW_COLUMN_VALUE": 17,
+    "DATABASE_ROW_LIST": 18
   },
-  {
-    "type": "/atom",
-    "parent": "/datum",
-    "subtypes": [
-      "/area",
-      "/turf",
-      "/obj",
-      "/mob"
-    ],
-    "vars": {
-      "alpha": 255,
-      "appearance_flags": 0,
-      "blend_mode": 0,
-      "color": null,
-      "density": 0,
-      "desc": null,
-      "dir": 2,
-      "gender": "neuter",
-      "icon": null,
-      "icon_state": null,
-      "infra_luminosity": 0,
-      "invisibility": 0,
-      "layer": 1,
-      "luminosity": 0,
-      "maptext": null,
-      "maptext_width": 32,
-      "maptext_height": 32,
-      "maptext_x": 0,
-      "maptext_y": 0,
-      "mouse_drag_pointer": 0,
-      "mouse_drop_pointer": 1,
-      "mouse_drop_zone": 0,
-      "mouse_opacity": 1,
-      "mouse_over_pointer": 0,
-      "name": null,
-      "opacity": 0,
-      "overlays": "list()",
-      "override": 0,
-      "pixel_x": 0,
-      "pixel_y": 0,
-      "pixel_z": 0,
-      "plane": 0,
-      "suffix": null,
-      "transform": null,
-      "underlays": "list()",
-      "verbs": "list()"
+  "definitions": [
+    {
+      "type": "GLOBAL",
+      "parent": "",
+      "subtypes": [],
+      "vars": {
+        "NORTH": 1,
+        "SOUTH": 2,
+        "EAST": 4,
+        "WEST": 8,
+        "NORTHEAST": 5,
+        "NORTHWEST": 9,
+        "SOUTHEAST": 6,
+        "SOUTHWEST": 10,
+  
+        "UP": 16,
+        "DOWN": 32,
+  
+        "BLIND": 1,
+        "SEE_MOBS": 4,
+        "SEE_OBJS": 8,
+        "SEE_TURFS": 16,
+        "SEE_SELF": 32,
+        "SEE_INFRA": 64,
+        "SEE_PIXELS": 256,
+        "SEE_THRU": 512,
+        "SEE_BLACKNESS": 1024,
+  
+        "MOB_PERSPECTIVE": 0,
+        "EYE_PERSPECTIVE": 1,
+        "EDGE_PERSPECTIVE": 2,
+  
+        "FLOAT_LAYER": -1,
+        "AREA_LAYER": 1,
+        "TURF_LAYER": 2,
+        "OBJ_LAYER": 3,
+        "MOB_LAYER": 4,
+        "FLY_LAYER": 5,
+        "EFFECTS_LAYER": 5000,
+        "TOPDOWN_LAYER": 10000,
+        "BACKGROUND_LAYER": 20000,
+        "FLOAT_PLANE": -32767,
+  
+        "TOPDOWN_MAP": 0,
+        "ISOMETRIC_MAP":1,
+        "SIDE_MAP": 2,
+        "TILED_ICON_MAP": 32768,
+  
+        "TRUE": 1,
+        "FALSE": 0,
+  
+        "MALE": "male",
+        "FEMALE": "female",
+        "NEUTER": "neuter",
+        "PLURAL": "plural",
+  
+        "MOUSE_INACTIVE_POINTER": 0,
+        "MOUSE_ACTIVE_POINTER": 1,
+        "MOUSE_DRAG_POINTER": 3,
+        "MOUSE_DROP_POINTER": 4,
+        "MOUSE_ARROW_POINTER": 5,
+        "MOUSE_CROSSHAIRS_POINTER": 6,
+        "MOUSE_HAND_POINTER": 7,
+  
+        "MOUSE_LEFT_BUTTON": 1,
+        "MOUSE_RIGHT_BUTTON": 2,
+        "MOUSE_MIDDLE_BUTTON": 4,
+        "MOUSE_CTRL_KEY": 8,
+        "MOUSE_SHIFT_KEY": 16,
+        "MOUSE_ALT_KEY": 32,
+  
+        "MS_WINDOWS": "MS Windows",
+        "UNIX": "UNIX",
+  
+        "_DM_datum": 1,
+        "_DM_atom": 2,
+        "_DM_movable": 4,
+        "_DM_sound": 32,
+        "_DM_image": 64,
+        "_DM_Icon": 256,
+        "_DM_RscFile": 512,
+        "_DM_Matrix": 1024,
+        "_DM_Database": 4096,
+        "_DM_Regex": 8192,
+        "_DM_Special": 16384,
+  
+        "SOUND_MUTE": 1,
+        "SOUND_PAUSED": 2,
+        "SOUND_STREAM": 4,
+        "SOUND_UPDATE": 16,
+  
+        "BLEND_DEFAULT": 0,
+        "BLEND_OVERLAY": 1,
+        "BLEND_ADD": 2,
+        "BLEND_SUBTRACT": 3,
+        "BLEND_MULTIPLY": 4
+      }
+    },
+    {
+      "type": "/sound",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "file": null,
+        "repeat": null,
+        "wait": null,
+        "channel": null,
+        "frequency": 0,
+        "pan": 0,
+        "volume": 100,
+        "priority": 0,
+        "status": 0,
+        "environment": -1,
+        "echo": null,
+        "x": 0,
+        "y": 0,
+        "z": 0,
+        "fallof": 1,
+        "_dm_interface": 545
+      }
+    },
+    {
+      "type": "/icon",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "icon": null,
+        "_dm_interface": 769
+      }
+    },
+    {
+      "type": "/matrix",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "a": 1,
+        "b": 0,
+        "c": 0,
+        "d": 0,
+        "e": 0,
+        "f": 0,
+        "_dm_interface": 1025
+      }
+    },
+    {
+      "type": "/database",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "_binobj": null,
+        "_dm_interface": 4097
+      }
+    },
+    {
+      "type": "/exception",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "name": null,
+        "desc": null,
+        "file": null,
+        "line": null
+      }
+    },
+    {
+      "type": "/regex",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "_dm_interface": 8193,
+        "name": null,
+        "flags": null,
+        "_binobj": null,
+        "text": null,
+        "match": null,
+        "group": null,
+        "index": null,
+        "next": null
+      }
+    },
+    {
+      "type": "/mutable_appearance",
+      "parent": "/image",
+      "subtypes": [],
+      "vars": {
+        "_dm_interface": 16449
+      }
+    },
+    {
+      "type": "/datum",
+      "parent": "",
+      "subtypes": [
+        "/atom"
+      ],
+      "vars": {
+        "tag": null
+      }
+    },
+    {
+      "type": "/atom",
+      "parent": "/datum",
+      "subtypes": [
+        "/area",
+        "/turf",
+        "/obj",
+        "/mob"
+      ],
+      "vars": {
+        "alpha": 255,
+        "appearance_flags": 0,
+        "blend_mode": 0,
+        "color": null,
+        "density": 0,
+        "desc": null,
+        "dir": 2,
+        "gender": "neuter",
+        "icon": null,
+        "icon_state": null,
+        "infra_luminosity": 0,
+        "invisibility": 0,
+        "layer": 1,
+        "luminosity": 0,
+        "maptext": null,
+        "maptext_width": 32,
+        "maptext_height": 32,
+        "maptext_x": 0,
+        "maptext_y": 0,
+        "mouse_drag_pointer": 0,
+        "mouse_drop_pointer": 1,
+        "mouse_drop_zone": 0,
+        "mouse_opacity": 1,
+        "mouse_over_pointer": 0,
+        "name": null,
+        "opacity": 0,
+        "overlays": "list()",
+        "override": 0,
+        "pixel_x": 0,
+        "pixel_y": 0,
+        "pixel_z": 0,
+        "plane": 0,
+        "suffix": null,
+        "transform": null,
+        "underlays": "list()",
+        "verbs": "list()"
+      }
+    },
+    {
+      "type": "/atom/movable",
+      "parent": "/atom",
+      "subtypes": [
+        "/obj",
+        "/mob"
+      ],
+      "vars": {
+        "animate_movement": 1,
+        "bound_x": 0,
+        "bound_y": 0,
+        "bound_width": 32,
+        "bound_height": 32,
+        "glide_size": 0,
+        "screen_loc": null,
+        "step_size": 32,
+        "step_x": 0,
+        "step_y": 0
+      }
+    },
+    {
+      "type": "/area",
+      "parent": "/atom",
+      "subtypes": [],
+      "vars": {
+        "layer": 1,
+        "luminosity": 1
+      }
+    },
+    {
+      "type": "/turf",
+      "parent": "/atom",
+      "subtypes": [],
+      "vars": {
+        "layer": 2
+      }
+    },
+    {
+      "type": "/obj",
+      "parent": "/atom/movable",
+      "subtypes": [],
+      "vars": {
+        "layer": 3
+      }
+    },
+    {
+      "type": "/mob",
+      "parent": "/atom/movable",
+      "subtypes": [],
+      "vars": {
+        "ckey": null,
+        "key": null,
+        "layer": 4,
+        "density": 1,
+        "see_in_dark": 2,
+        "see_infrared": 0,
+        "see_invisible": 0,
+        "sight": 0
+      }
+    },
+    {
+      "type": "/world",
+      "parent": "",
+      "subtypes": [],
+      "vars": {
+        "area": "/area",
+        "turf": "/turf",
+        "mob": "/mob",
+        "icon_size": 32
+      }
     }
-  },
-  {
-    "type": "/atom/movable",
-    "parent": "/atom",
-    "subtypes": [
-      "/obj",
-      "/mob"
-    ],
-    "vars": {
-      "animate_movement": 1,
-      "bound_x": 0,
-      "bound_y": 0,
-      "bound_width": 32,
-      "bound_height": 32,
-      "glide_size": 0,
-      "screen_loc": null,
-      "step_size": 32,
-      "step_x": 0,
-      "step_y": 0
-    }
-  },
-  {
-    "type": "/area",
-    "parent": "/atom",
-    "subtypes": [],
-    "vars": {
-      "layer": 1,
-      "luminosity": 1
-    }
-  },
-  {
-    "type": "/turf",
-    "parent": "/atom",
-    "subtypes": [],
-    "vars": {
-      "layer": 2
-    }
-  },
-  {
-    "type": "/obj",
-    "parent": "/atom/movable",
-    "subtypes": [],
-    "vars": {
-      "layer": 3
-    }
-  },
-  {
-    "type": "/mob",
-    "parent": "/atom/movable",
-    "subtypes": [],
-    "vars": {
-      "ckey": null,
-      "key": null,
-      "layer": 4,
-      "density": 1,
-      "see_in_dark": 2,
-      "see_infrared": 0,
-      "see_invisible": 0,
-      "sight": 0
-    }
-  },
-  {
-    "type": "/world",
-    "parent": "",
-    "subtypes": [],
-    "vars": {
-      "area": "/area",
-      "turf": "/turf",
-      "mob": "/mob",
-      "icon_size": 32
-    }
-  }
-]
+  ]
+}

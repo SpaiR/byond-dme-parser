@@ -11,7 +11,7 @@ public class PreParserTest {
     @Test
     public void testParse() {
         PreParser preParser = new PreParser();
-        List<FileLine> fileLines = preParser.parse(ResourceUtil.loadFile("preparse_file.dm"));
+        List<FileLine> fileLines = preParser.parse(TestResourceUtil.readResourceFile("preparse_file.dm"));
 
         assertEquals("var/VARIABLE = 123", fileLines.get(0).getText());
         assertEquals(0, fileLines.get(0).getIndentLevel());

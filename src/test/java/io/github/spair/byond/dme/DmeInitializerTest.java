@@ -3,14 +3,15 @@ package io.github.spair.byond.dme;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class DmeInitializerTest {
 
     @Test
     public void testInitialize() {
         Dme dme = DmeInitializer.initialize(new Dme());
-        assertTrue(!dme.getItems().isEmpty());
+
+        assertFalse(dme.getItems().isEmpty());
 
         DmeItem atom = dme.getItem(ByondTypes.ATOM);
 
