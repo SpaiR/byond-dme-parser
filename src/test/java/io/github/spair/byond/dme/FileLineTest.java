@@ -12,7 +12,7 @@ public class FileLineTest {
 
         assertTrue(builder.hasNoIndent());
 
-        builder.append('1').append('2').append("3");
+        builder.append("1").append('2').append("3");
         builder.setIndentLevel(3);
 
         assertEquals("123", builder.build().getText());

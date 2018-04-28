@@ -34,7 +34,6 @@ final class FileLine {
             return this;
         }
 
-        @SuppressWarnings("UnusedReturnValue")
         Builder append(final String s) {
             text.append(s);
             return this;
