@@ -8,7 +8,7 @@ public class DmeParserTest {
 
     @Test
     public void testParse() {
-        Dme dme = DmeParser.parse(TestResourceUtil.readResourceFile("test_dme.dme"));
+        Dme dme = DmeParser.parse(ResourceUtil.readResourceFile("test_dme.dme"));
 
         DmeItem item = dme.getItem("/obj/item");
         assertNotNull(item);
@@ -24,6 +24,6 @@ public class DmeParserTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testParseWithWrongFile() {
-        DmeParser.parse(TestResourceUtil.readResourceFile("test_file.txt"));
+        DmeParser.parse(ResourceUtil.readResourceFile("test_file.txt"));
     }
 }
