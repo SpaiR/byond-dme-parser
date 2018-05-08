@@ -23,9 +23,7 @@ public final class DmeParser {
     private static final Pattern VAR_DEFINITION = Pattern.compile(
             "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
 
-    private final PreParser preParser = new PreParser();
     private List<String> pathTree = new ArrayList<>();
-
     private Dme dme = DmeInitializer.initialize(new Dme());
 
     public static Dme parse(final File dmeFile) {
@@ -49,7 +47,7 @@ public final class DmeParser {
         Deque<Boolean> preProcessStack = new ArrayDeque<>();
         int preProcessBlocked = 0;
 
-        for (FileLine line : preParser.parse(file)) {
+        for (FileLine line : PreParser.parse(file)) {
             final String lineText = line.getText();
 
             if (line.hasNoIndent()) {

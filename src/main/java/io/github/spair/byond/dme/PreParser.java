@@ -32,7 +32,7 @@ final class PreParser {
     private static final String QUOTE_ESCAPE_EXTRA = "\\\"";
 
     // Strips comments and splits file into separate lines.
-    List<FileLine> parse(final File file) {
+    static List<FileLine> parse(final File file) {
         StringBuilder text = new StringBuilder();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -54,7 +54,7 @@ final class PreParser {
         return doParse(text.toString(), file.getName());
     }
 
-    private List<FileLine> doParse(final String text, final String fileName) {
+    private static List<FileLine> doParse(final String text, final String fileName) {
         Deque<Syntax> syntaxStack = new ArrayDeque<>();
         List<FileLine> fileLines = new ArrayList<>();
         FileLine.Builder builder = FileLine.builder();
@@ -175,5 +175,8 @@ final class PreParser {
         STRING, MULTI_STRING,
         COMMENT, MULTI_COMMENT,
         BRACKETS, PARENTHESES
+    }
+
+    private PreParser() {
     }
 }
