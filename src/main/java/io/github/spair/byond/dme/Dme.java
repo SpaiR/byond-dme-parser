@@ -12,6 +12,7 @@ import java.util.ArrayList;
 @SuppressWarnings("WeakerAccess")
 public class Dme {
 
+    private String absoluteRootPath;
     private Map<String, String> macroses = new HashMap<>();
     private List<String> includedFiles = new ArrayList<>();
     private List<MapFile> mapFiles = new ArrayList<>();
@@ -47,7 +48,7 @@ public class Dme {
         return items.get(type);
     }
 
-    public DmeItem getGlobalObject() {
-        return items.get(ByondTypes.GLOBAL);
+    public Map<String, String> getGlobalVars() {
+        return items.get(ByondTypes.GLOBAL).getVars();
     }
 }

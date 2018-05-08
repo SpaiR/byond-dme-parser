@@ -2,13 +2,18 @@ package io.github.spair.byond.dme;
 
 import org.junit.Test;
 
+import java.io.File;
+
 import static org.junit.Assert.*;
 
 public class DmeParserTest {
 
     @Test
     public void testParse() {
-        Dme dme = DmeParser.parse(ResourceUtil.readResourceFile("test_dme.dme"));
+        File testDmeFile = ResourceUtil.readResourceFile("test_dme.dme");
+        Dme dme = DmeParser.parse(testDmeFile);
+
+        assertEquals(dme.getAbsoluteRootPath(), testDmeFile.getParent());
 
         DmeItem item = dme.getItem("/obj/item");
         assertNotNull(item);
@@ -17,7 +22,7 @@ public class DmeParserTest {
         assertTrue(item.getSubtypes().isEmpty());
 
         assertTrue(!dme.getMacroses().isEmpty());
-        assertTrue(!dme.getGlobalObject().getVars().isEmpty());
+        assertTrue(!dme.getGlobalVars().isEmpty());
 
         assertTrue(!dme.getMapFiles().isEmpty());
     }

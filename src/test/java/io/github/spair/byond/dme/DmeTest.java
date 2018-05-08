@@ -19,14 +19,6 @@ public class DmeTest {
     }
 
     @Test
-    public void testGetGlobalObject() {
-        Dme dme = new Dme();
-        dme.addItem(new DmeItem(ByondTypes.GLOBAL, dme));
-
-        assertEquals(ByondTypes.GLOBAL, dme.getGlobalObject().getType());
-    }
-
-    @Test
     public void testGetMacros() {
         Dme dme = new Dme();
         dme.addMacros("v", "V");

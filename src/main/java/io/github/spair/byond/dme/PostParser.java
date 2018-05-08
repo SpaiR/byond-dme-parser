@@ -23,7 +23,7 @@ final class PostParser {
 
     private PostParser(final Dme dme) {
         this.dme = dme;
-        this.globalVars = dme.getGlobalObject().getVars();
+        this.globalVars = dme.getGlobalVars();
     }
 
     static void parse(final Dme dme) {
