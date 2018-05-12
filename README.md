@@ -23,13 +23,13 @@ Library deployed to Maven Central and JCenter repositories.
 <dependency>
     <groupId>io.github.spair</groupId>
     <artifactId>byond-dme-parser</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
 #### build.gradle:
 ```
-compile 'io.github.spair:byond-dme-parser:0.1.3'
+compile 'io.github.spair:byond-dme-parser:0.1.4'
 ```
 
 ## How To Use
