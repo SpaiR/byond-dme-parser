@@ -30,7 +30,7 @@ public final class DmeParser {
         if (dmeFile.isFile() && dmeFile.getName().endsWith(DME_SUFFIX)) {
             DmeParser parser = new DmeParser();
 
-            parser.dme.setAbsoluteRootPath(dmeFile.getParent());
+            parser.dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
             parser.doParse(dmeFile);
             PostParser.parse(parser.dme);
 
