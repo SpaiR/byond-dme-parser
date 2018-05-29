@@ -81,14 +81,14 @@ final class DmeInitializer {
             if (value.isNull()) {
                 item.setEmptyVar(name);
             } else if (value.isNumber()) {
-                item.setNumberVar(name, value.asInt());
+                item.setVar(name, value.asInt());
             } else if (value.isString()) {
                 final String stringValue = value.asString();
 
                 if (stringValue.startsWith(LIST)) {
                     item.setVar(name, stringValue);
                 } else {
-                    item.setStringVar(name, stringValue);
+                    item.setQuotedVar(name, stringValue);
                 }
             } else {
                 throw new IllegalArgumentException("Unknown type of variable found in JSON."

@@ -51,24 +51,50 @@ public class DmeItem {
         vars.put(name, value);
     }
 
+    public void setVar(final String name, final Number value) {
+        vars.put(name, value.toString());
+    }
+
     public void setEmptyVar(final String name) {
         vars.put(name, ByondTypes.NULL);
     }
 
-    public void setStringVar(final String name, final Object value) {
+    /**
+     * Method wraps variable in double quotes and then puts it in current item.
+     *
+     * @param name variable name to add
+     * @param value variable value to wrap and add
+     */
+    public void setQuotedVar(final String name, final Object value) {
         vars.put(name, '"' + value.toString() + '"');
-    }
-
-    public void setNumberVar(final String name, final Number value) {
-        vars.put(name, value.toString());
     }
 
     public String getVar(final String name) {
         return vars.get(name);
     }
 
+    /**
+     * Method returns variable without first and last character.
+     * It's implied that those chars will be single or double quotes.
+     *
+     * @param name variable name to get
+     * @return unwrapped variable
+     */
+    public String getVarUnquoted(final String name) {
+        final String var = vars.get(name);
+        return var.substring(1, var.length() - 1);
+    }
+
+    public int getVarAsInt(final String name) {
+        return Integer.parseInt(vars.get(name));
+    }
+
+    public double getVarAsDouble(final String name) {
+        return Double.parseDouble(vars.get(name));
+    }
+
     public void addSubtype(final DmeItem item) {
-        addSubtype(item.getType());
+        subtypes.add(item.getType());
     }
 
     public void addSubtype(final String subtypePath) {

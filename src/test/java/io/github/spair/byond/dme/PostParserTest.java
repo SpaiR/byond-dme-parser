@@ -52,7 +52,7 @@ public class PostParserTest {
         dme.addMacros("TEXT", "Text");
 
         DmeItem global = new DmeItem(ByondTypes.GLOBAL, dme);
-        global.setNumberVar("NORTH", 1);
+        global.setVar("NORTH", 1);
         dme.addItem(global);
 
         DmeItem datum = new DmeItem("/datum", dme);

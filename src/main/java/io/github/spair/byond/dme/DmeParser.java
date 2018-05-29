@@ -143,7 +143,7 @@ public final class DmeParser {
 
         if (matcher.find()) {
             String filePath = matcher.group(1);
-            String fullFilePath = currentFile.getParentFile().getAbsolutePath() + '/' + filePath;
+            String fullFilePath = currentFile.getParentFile().getAbsolutePath() + File.separatorChar + filePath;
 
             if (filePath.endsWith(DMM_SUFFIX)) {
                 dme.addMapFile(fullFilePath);

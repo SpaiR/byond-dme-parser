@@ -1,33 +1,53 @@
 package io.github.spair.byond.dme;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class DmeItemTest {
 
+    private DmeItem item;
+
+    @Before
+    public void setUp() {
+        item = new DmeItem("/atom", null);
+    }
+
     @Test
     public void testSetEmptyVar() {
-        DmeItem item = new DmeItem("/atom", null);
-        item.setEmptyVar("variable");
-
-        assertEquals("null", item.getVar("variable"));
+        item.setEmptyVar("var");
+        assertEquals("null", item.getVar("var"));
     }
 
     @Test
-    public void testSetStringVar() {
-        DmeItem item = new DmeItem("/atom", null);
-        item.setStringVar("variable", "text");
-
-        assertEquals("\"text\"", item.getVar("variable"));
+    public void testSetQuotedVar() {
+        item.setQuotedVar("var", "text");
+        assertEquals("\"text\"", item.getVar("var"));
     }
 
     @Test
-    public void testSetNumberVar() {
-        DmeItem item = new DmeItem("/atom", null);
-        item.setNumberVar("variable", 13);
+    public void testSetVarWithNumber() {
+        item.setVar("var", 13);
+        assertEquals("13", item.getVar("var"));
+    }
 
-        assertEquals("13", item.getVar("variable"));
+    @Test
+    public void testGetVarUnquoted() {
+        item.setVar("var", "\"123\"");
+        assertEquals("123", item.getVarUnquoted("var"));
+    }
+
+    @Test
+    public void testGetVarAsInt() {
+        item.setVar("var", "123");
+        assertEquals(123, item.getVarAsInt("var"));
+    }
+
+    @Test
+    public void testGetVarAsDouble() {
+        item.setVar("var", 123.0d);
+        assertEquals(123.0d, item.getVarAsDouble("var"), 0);
     }
 
     @Test
