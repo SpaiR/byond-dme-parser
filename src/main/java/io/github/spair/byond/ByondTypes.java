@@ -1,4 +1,4 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond;
 
 /**
  * Constants with BYOND types.
@@ -7,10 +7,8 @@ package io.github.spair.byond.dme;
 public final class ByondTypes {
 
     public static final String NULL = "null";
-    /**
-     * Not a BYOND type, but mostly a holder which is used by parser to store all variables with global scope.
-     * It could be used in the next way: {@code Dme::getItem(ByondTypes.GLOBAL)}
-     */
+
+    /** Holder to store all variables with global scope. */
     public static final String GLOBAL = "GLOBAL";
 
     public static final String DATUM = "/datum";

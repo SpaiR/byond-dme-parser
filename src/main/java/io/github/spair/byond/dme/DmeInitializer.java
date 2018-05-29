@@ -36,7 +36,7 @@ final class DmeInitializer {
     private Dme doInit() {
         final JsonObject initDmeJson = parseInitialDmeJson();
 
-        initDmeJson.get(MACROSES).asObject().forEach(this::addMacroses);
+        initDmeJson.get(MACROSES).asObject().forEach(this::addMacros);
         initDmeJson.get(DEFINITIONS).asArray().forEach(this::addDefinition);
 
         return dme;
@@ -51,7 +51,7 @@ final class DmeInitializer {
         }
     }
 
-    private void addMacroses(final JsonObject.Member macros) {
+    private void addMacros(final JsonObject.Member macros) {
         final String name = macros.getName();
         final JsonValue value = macros.getValue();
 
@@ -91,7 +91,8 @@ final class DmeInitializer {
                     item.setStringVar(name, stringValue);
                 }
             } else {
-                throw new IllegalArgumentException("Unknown type of variable found in JSON. Name: " + name);
+                throw new IllegalArgumentException("Unknown type of variable found in JSON."
+                        + " Name: " + name + ", value: " + value);
             }
         });
 

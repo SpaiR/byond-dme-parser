@@ -1,5 +1,7 @@
 package io.github.spair.byond.dme;
 
+import io.github.spair.byond.ByondTypes;
+
 import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
@@ -13,6 +15,13 @@ import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public final class DmeParser {
+
+    private static final String DIRECTIVE_HASH = "#";
+    private static final String DIRECTIVE_UNDEF = "undef";
+    private static final String DIRECTIVE_IFDEF = "ifdef";
+    private static final String DIRECTIVE_IFNDEF = "ifndef";
+    private static final String DIRECTIVE_IF = "if";
+    private static final String DIRECTIVE_HASHED_ENDIF = "#endif";
 
     private static final String DME_SUFFIX = ".dme";
     private static final String DMM_SUFFIX = ".dmm";
@@ -54,8 +63,8 @@ public final class DmeParser {
                 continue;
             }
 
-            if (lineText.startsWith(Directives.HASH)) {
-                if (lineText.contains(Directives.Hashed.ENDIF) && !preProcessStack.removeLast()) {
+            if (lineText.startsWith(DIRECTIVE_HASH)) {
+                if (lineText.contains(DIRECTIVE_HASHED_ENDIF) && !preProcessStack.removeLast()) {
                     preProcessBlocked--;
                 }
 
@@ -65,10 +74,10 @@ public final class DmeParser {
                     final String macrosValue = matcher.group(2);
 
                     switch (matcher.group(1)) {
-                        case Directives.UNDEF:
+                        case DIRECTIVE_UNDEF:
                             macroses.remove(macrosValue);
                             break;
-                        case Directives.IFDEF:
+                        case DIRECTIVE_IFDEF:
                             boolean isDefined = macroses.containsKey(macrosValue);
                             preProcessStack.addLast(isDefined);
 
@@ -77,7 +86,7 @@ public final class DmeParser {
                             }
 
                             break;
-                        case Directives.IFNDEF:
+                        case DIRECTIVE_IFNDEF:
                             boolean isNotDefined = !macroses.containsKey(macrosValue);
                             preProcessStack.addLast(isNotDefined);
 
@@ -86,7 +95,7 @@ public final class DmeParser {
                             }
 
                             break;
-                        case Directives.IF:
+                        case DIRECTIVE_IF:
                             preProcessStack.addLast(true);
                             break;
                     }
@@ -134,7 +143,7 @@ public final class DmeParser {
 
         if (matcher.find()) {
             String filePath = matcher.group(1);
-            String fullFilePath = (currentFile.getParent() + '/' + filePath).replace('\\', '/');
+            String fullFilePath = currentFile.getParentFile().getAbsolutePath() + '/' + filePath;
 
             if (filePath.endsWith(DMM_SUFFIX)) {
                 dme.addMapFile(fullFilePath);

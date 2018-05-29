@@ -1,5 +1,6 @@
 package io.github.spair.byond.dme;
 
+import io.github.spair.byond.ByondTypes;
 import lombok.Data;
 import lombok.ToString;
 import lombok.Setter;

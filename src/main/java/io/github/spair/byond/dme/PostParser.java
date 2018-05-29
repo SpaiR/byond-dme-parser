@@ -1,5 +1,7 @@
 package io.github.spair.byond.dme;
 
+import io.github.spair.byond.ByondTypes;
+
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;

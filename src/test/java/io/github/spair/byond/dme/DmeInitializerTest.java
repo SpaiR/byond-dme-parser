@@ -1,5 +1,6 @@
 package io.github.spair.byond.dme;
 
+import io.github.spair.byond.ByondTypes;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
