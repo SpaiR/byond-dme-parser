@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+@SuppressWarnings("ConstantConditions")
 public class DmeInitializerTest {
 
     @Test
@@ -16,9 +17,9 @@ public class DmeInitializerTest {
 
         DmeItem atom = dme.getItem(ByondTypes.ATOM);
 
-        assertEquals("\"neuter\"", atom.getVar("gender"));
-        assertEquals("null", atom.getVar("color"));
-        assertEquals("255", atom.getVar("alpha"));
-        assertEquals("list()", atom.getVar("overlays"));
+        assertEquals("\"neuter\"", atom.getVar("gender").get());
+        assertEquals("null", atom.getVar("color").get());
+        assertEquals("255", atom.getVar("alpha").get());
+        assertEquals("list()", atom.getVar("overlays").get());
     }
 }

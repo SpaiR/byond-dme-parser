@@ -1,6 +1,7 @@
 package io.github.spair.byond.dme;
 
 import io.github.spair.byond.ByondTypes;
+import io.github.spair.byond.VarUtil;
 import lombok.Data;
 import lombok.ToString;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 
 @Data
 @ToString(exclude = "environment")
@@ -69,8 +71,8 @@ public class DmeItem {
         vars.put(name, '"' + value.toString() + '"');
     }
 
-    public String getVar(final String name) {
-        return vars.get(name);
+    public Optional<String> getVar(final String name) {
+        return VarUtil.optionalNullable(vars.get(name));
     }
 
     /**
@@ -80,17 +82,16 @@ public class DmeItem {
      * @param name variable name to get
      * @return unwrapped variable
      */
-    public String getVarUnquoted(final String name) {
-        final String var = vars.get(name);
-        return var.substring(1, var.length() - 1);
+    public Optional<String> getVarUnquoted(final String name) {
+        return VarUtil.optionalUnquoted(vars.get(name));
     }
 
-    public int getVarAsInt(final String name) {
-        return Integer.parseInt(vars.get(name));
+    public Optional<Integer> getVarAsInt(final String name) {
+        return VarUtil.optionalInt(vars.get(name));
     }
 
-    public double getVarAsDouble(final String name) {
-        return Double.parseDouble(vars.get(name));
+    public Optional<Double> getVarAsDouble(final String name) {
+        return VarUtil.optionalDouble(vars.get(name));
     }
 
     public void addSubtype(final DmeItem item) {

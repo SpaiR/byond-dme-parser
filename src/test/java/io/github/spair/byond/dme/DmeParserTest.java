@@ -6,6 +6,7 @@ import java.io.File;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("ConstantConditions")
 public class DmeParserTest {
 
     @Test
@@ -17,7 +18,7 @@ public class DmeParserTest {
 
         DmeItem item = dme.getItem("/obj/item");
         assertNotNull(item);
-        assertEquals("1", item.getVar("custom_var"));
+        assertEquals("1", item.getVar("custom_var").get());
         assertEquals("/obj", item.getParentPath());
         assertTrue(item.getSubtypes().isEmpty());
 

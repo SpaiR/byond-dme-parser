@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+@SuppressWarnings("ConstantConditions")
 public class PostParserTest {
 
     @Test
@@ -13,7 +14,7 @@ public class PostParserTest {
         PostParser.parse(dme);
 
         DmeItem datum = dme.getItem("/datum");
-        assertEquals("456", datum.getVar("datumVar"));
+        assertEquals("456", datum.getVar("datumVar").get());
         assertEquals(1, datum.getVars().size());
         assertEquals(5, datum.getSubtypes().size());
         assertTrue(datum.getSubtypes().contains("/atom"));
@@ -23,11 +24,11 @@ public class PostParserTest {
         assertTrue(datum.getSubtypes().contains("/atom/intermediate/child"));
 
         DmeItem atom = dme.getItem("/atom");
-        assertEquals("value1", atom.getVar("var1"));
-        assertEquals("\"We have TEXT in the NORTH dir\"", atom.getVar("textVar"));
-        assertEquals("Some TEXT goes here", atom.getVar("macrosVar"));
-        assertEquals("Current dir is 1", atom.getVar("globalVar"));
-        assertEquals("456", atom.getVar("datumVar"));
+        assertEquals("value1", atom.getVar("var1").get());
+        assertEquals("\"We have TEXT in the NORTH dir\"", atom.getVar("textVar").get());
+        assertEquals("Some TEXT goes here", atom.getVar("macrosVar").get());
+        assertEquals("Current dir is 1", atom.getVar("globalVar").get());
+        assertEquals("456", atom.getVar("datumVar").get());
         assertEquals(5, atom.getVars().size());
         assertEquals("/datum", atom.getParentPath());
         assertEquals(4, atom.getSubtypes().size());
@@ -39,12 +40,12 @@ public class PostParserTest {
         assertNotNull(dme.getItem("/atom/intermediate"));
 
         DmeItem child = dme.getItem("/atom/child");
-        assertEquals("456", child.getVar("datumVar"));
-        assertEquals("value2", child.getVar("var2"));
+        assertEquals("456", child.getVar("datumVar").get());
+        assertEquals("value2", child.getVar("var2").get());
 
         DmeItem grandchild = dme.getItem("/atom/child/grandchild");
-        assertEquals("value2-3", grandchild.getVar("var1"));
-        assertEquals("value2", grandchild.getVar("var2"));
+        assertEquals("value2-3", grandchild.getVar("var1").get());
+        assertEquals("value2", grandchild.getVar("var2").get());
     }
 
     private Dme prepareDme() {
