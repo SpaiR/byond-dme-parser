@@ -104,7 +104,7 @@ final class PreParser {
 
                 continue;
             } else if (inComment) {
-                if (currentChar == SLASH && nextChar == STAR) {
+                if (currentChar == SLASH && nextChar == STAR && currentSyntax != Syntax.COMMENT) {
                     syntaxStack.addLast(Syntax.MULTI_COMMENT);
                     charIndex++;
                 } else if (currentChar == STAR && nextChar == SLASH && currentSyntax == Syntax.MULTI_COMMENT) {
