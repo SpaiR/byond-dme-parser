@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.ToString;
 import lombok.Setter;
 import lombok.Getter;
+import lombok.EqualsAndHashCode;
 import lombok.AccessLevel;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Data
 @ToString(exclude = "environment")
+@EqualsAndHashCode(exclude = "environment")
 @SuppressWarnings("WeakerAccess")
 public class DmeItem {
 
