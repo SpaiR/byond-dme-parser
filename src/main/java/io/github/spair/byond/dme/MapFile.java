@@ -2,8 +2,6 @@ package io.github.spair.byond.dme;
 
 import lombok.Data;
 
-import java.util.Objects;
-
 @Data
 @SuppressWarnings("WeakerAccess")
 public class MapFile {
@@ -12,7 +10,7 @@ public class MapFile {
     private String path;
 
     public MapFile(final String path) {
-        if (Objects.isNull(path) || path.isEmpty()) {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("Map file path could not be empty");
         }
 

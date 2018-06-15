@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -119,7 +118,7 @@ public final class DmeParser {
             if (varMatcher.find()) {
                 final String value = varMatcher.group(2);
 
-                if (Objects.nonNull(value)) {
+                if (value != null) {
                     final String varName = varMatcher.group(1);
                     dmeItem.setVar(varName, WordDefineChecker.check(value, macroses));
                 } else {
@@ -132,7 +131,7 @@ public final class DmeParser {
     private void addNewMacrosValueIfExist(final String lineText) {
         Matcher matcher = DEFINE.matcher(lineText);
 
-        if (matcher.find() && Objects.nonNull(matcher.group(2))) {
+        if (matcher.find() && matcher.group(2) != null) {
             String macrosValue = matcher.group(2).replace("$", "\\$");
             dme.addMacros(matcher.group(1), WordDefineChecker.check(macrosValue, dme.getMacroses()));
         }
@@ -169,7 +168,7 @@ public final class DmeParser {
         for (int i = 0; i < line.getIndentLevel() + 1; i++) {
             String item = pathTree.get(i);
 
-            if (Objects.nonNull(item) && !item.isEmpty()) {
+            if (item != null && !item.isEmpty()) {
                 if (item.startsWith("/")) {
                     fullPath = new StringBuilder(item);
                 } else {

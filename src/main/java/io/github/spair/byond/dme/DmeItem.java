@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Optional;
 
 @Data
@@ -41,7 +40,7 @@ public class DmeItem {
 
         if (!result) {
             DmeItem itemToCompare = environment.getItem(typeToCompare);
-            result = Objects.nonNull(itemToCompare) && itemToCompare.subtypes.contains(type);
+            result = itemToCompare != null && itemToCompare.subtypes.contains(type);
         }
 
         return result;

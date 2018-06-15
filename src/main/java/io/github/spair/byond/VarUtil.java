@@ -1,6 +1,5 @@
 package io.github.spair.byond;
 
-import java.util.Objects;
 import java.util.Optional;
 
 public final class VarUtil {
@@ -31,7 +30,7 @@ public final class VarUtil {
     }
 
     private static boolean isEmptyVar(final String var) {
-        return Objects.isNull(var) || ByondTypes.NULL.equals(var) || var.isEmpty();
+        return var == null || ByondTypes.NULL.equals(var) || var.isEmpty();
     }
 
     private VarUtil() {

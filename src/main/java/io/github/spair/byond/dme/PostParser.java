@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -79,7 +78,7 @@ final class PostParser {
     }
 
     private void lookUpVars(final DmeItem item, final DmeItem parent) {
-        if (Objects.nonNull(parent)) {
+        if (parent != null) {
             if (!itemsWithLookedVars.contains(parent.getType()) && hasParent(parent.getType())) {
                 lookUpVars(parent, dme.getItem(parent.getParentPath()));
             }
@@ -101,7 +100,7 @@ final class PostParser {
 
         DmeItem parent = dme.getItem(parentPath);
 
-        if (Objects.isNull(parent)) {
+        if (parent == null) {
             if (additionalCreatedItems.containsKey(parentPath)) {
                 parent = additionalCreatedItems.get(parentPath);
             } else {
