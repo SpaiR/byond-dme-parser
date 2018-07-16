@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Arrays;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 final class PostParser {
 
@@ -42,11 +40,9 @@ final class PostParser {
 
         addAdditionalItemsToDme();
 
-        executeConcurrentTasks(
-                Arrays.asList(
-                        this::assignAllSubtypesFromRoots,
-                        this::lookupAllParentsVars
-                )
+        executeAsync(
+                CompletableFuture.runAsync(this::assignAllSubtypesFromRoots),
+                CompletableFuture.runAsync(this::lookupAllParentsVars)
         );
     }
 
@@ -57,9 +53,8 @@ final class PostParser {
     }
 
     // Makes parents to know about every existed subtype.
-    private Void assignAllSubtypesFromRoots() {
+    private void assignAllSubtypesFromRoots() {
         roots.forEach(this::setAndReturnAllSubtypes);
-        return null;
     }
 
     private Set<String> setAndReturnAllSubtypes(final DmeItem item) {
@@ -72,9 +67,8 @@ final class PostParser {
         return itemSubtypes;
     }
 
-    private Void lookupAllParentsVars() {
+    private void lookupAllParentsVars() {
         dme.getItems().forEach((type, item) -> lookUpVars(item, dme.getItem(item.getParentPath())));
-        return null;
     }
 
     private void lookUpVars(final DmeItem item, final DmeItem parent) {
@@ -145,15 +139,11 @@ final class PostParser {
         additionalCreatedItems.values().forEach(dme::addItem);
     }
 
-    private void executeConcurrentTasks(final List<Callable<Void>> tasks) {
-        final ExecutorService executor = Executors.newWorkStealingPool(tasks.size());
-
+    private void executeAsync(final CompletableFuture... futures) {
         try {
-            executor.invokeAll(tasks);
-        } catch (InterruptedException e) {
+            CompletableFuture.allOf(futures).get();
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
-        } finally {
-            executor.shutdown();
         }
     }
 }
