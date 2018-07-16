@@ -141,8 +141,8 @@ public final class DmeParser {
         Matcher matcher = INCLUDE.matcher(lineText);
 
         if (matcher.find()) {
-            String filePath = matcher.group(1);
-            String fullFilePath = currentFile.getParentFile().getAbsolutePath() + File.separatorChar + filePath;
+            String filePath = matcher.group(1).replace('\\', File.separatorChar);
+            String fullFilePath = currentFile.getParentFile().getAbsolutePath() + File.separator + filePath;
 
             if (filePath.endsWith(DMM_SUFFIX)) {
                 dme.addMapFile(fullFilePath);
@@ -172,7 +172,7 @@ public final class DmeParser {
                 if (item.startsWith("/")) {
                     fullPath = new StringBuilder(item);
                 } else {
-                    fullPath.append("/").append(item);
+                    fullPath.append('/').append(item);
                 }
             }
         }
