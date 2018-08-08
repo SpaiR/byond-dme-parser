@@ -5,28 +5,25 @@ import java.util.regex.Pattern;
 
 final class PatternHolder {
 
-    private static final Pattern DIRECTIVES = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
-    private static final Pattern INCLUDE = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
-    private static final Pattern DEFINE = Pattern.compile("^#define\\s+(\\w+)(?:\\([^)]*\\))?(?:\\s+(.+))?");
-    private static final Pattern VAR_DEFINITION = Pattern.compile(
+    private final Pattern directives = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
+    private final Pattern include = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
+    private final Pattern define = Pattern.compile("^#define\\s+(\\w+)(?:\\([^)]*\\))?(?:\\s+(.+))?");
+    private final Pattern varDefinition = Pattern.compile(
             "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
 
-    static Matcher directivesMatcher(final String text) {
-        return DIRECTIVES.matcher(text);
+    Matcher directivesMatcher(final String text) {
+        return directives.matcher(text);
     }
 
-    static Matcher includeMatcher(final String text) {
-        return INCLUDE.matcher(text);
+    Matcher includeMatcher(final String text) {
+        return include.matcher(text);
     }
 
-    static Matcher defineMatcher(final String text) {
-        return DEFINE.matcher(text);
+    Matcher defineMatcher(final String text) {
+        return define.matcher(text);
     }
 
-    static Matcher varDefMatcher(final String text) {
-        return VAR_DEFINITION.matcher(text);
-    }
-
-    private PatternHolder() {
+    Matcher varDefMatcher(final String text) {
+        return varDefinition.matcher(text);
     }
 }

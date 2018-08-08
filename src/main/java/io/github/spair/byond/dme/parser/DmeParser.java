@@ -24,6 +24,8 @@ public final class DmeParser {
     private static final String DIRECTIVE_IF = "if";
     private static final String DIRECTIVE_HASHED_ENDIF = "#endif";
 
+    private final PatternHolder patternHolder = new PatternHolder();
+
     private List<String> pathTree = new ArrayList<>();
     private Dme dme = DmeInitializer.initialize(new Dme());
 
@@ -60,7 +62,7 @@ public final class DmeParser {
                     preProcessBlocked--;
                 }
 
-                Matcher matcher = PatternHolder.directivesMatcher(lineText);
+                Matcher matcher = patternHolder.directivesMatcher(lineText);
 
                 if (matcher.find()) {
                     final String macrosValue = matcher.group(2);
@@ -106,7 +108,7 @@ public final class DmeParser {
             final String type = formTypeName(fullPath);
 
             DmeItem dmeItem = dme.getItemOrCreate(type);
-            Matcher varMatcher = PatternHolder.varDefMatcher(fullPath);
+            Matcher varMatcher = patternHolder.varDefMatcher(fullPath);
 
             if (varMatcher.find()) {
                 final String value = varMatcher.group(2);
@@ -122,7 +124,7 @@ public final class DmeParser {
     }
 
     private void addNewMacrosValueIfExist(final String lineText) {
-        Matcher matcher = PatternHolder.defineMatcher(lineText);
+        Matcher matcher = patternHolder.defineMatcher(lineText);
 
         if (matcher.find() && matcher.group(2) != null) {
             String macrosValue = matcher.group(2).replace("$", "\\$");
@@ -131,7 +133,7 @@ public final class DmeParser {
     }
 
     private void parseIncludedFileIfExist(final String lineText, final File currentFile) {
-        Matcher matcher = PatternHolder.includeMatcher(lineText);
+        Matcher matcher = patternHolder.includeMatcher(lineText);
 
         if (matcher.find()) {
             String filePath = matcher.group(1).replace('\\', File.separatorChar);
