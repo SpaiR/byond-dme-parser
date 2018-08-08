@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("ConstantConditions")
+@SuppressWarnings({"ConstantConditions", "OptionalGetWithoutIsPresent"})
 public class PostParserTest {
 
     @Test
@@ -17,7 +17,9 @@ public class PostParserTest {
 
         DmeItem datum = dme.getItem("/datum");
         assertEquals("456", datum.getVar("datumVar").get());
-        assertEquals(1, datum.getVars().size());
+        assertEquals("6.0", datum.getVar("expressionVar").get());
+        assertEquals("\"2 + 4\"", datum.getVar("stringVarWithExpression").get());
+        assertEquals(3, datum.getVars().size());
         assertEquals(5, datum.getSubtypes().size());
         assertTrue(datum.getSubtypes().contains("/atom"));
         assertTrue(datum.getSubtypes().contains("/atom/child"));
@@ -31,7 +33,7 @@ public class PostParserTest {
         assertEquals("Some TEXT goes here", atom.getVar("macrosVar").get());
         assertEquals("Current dir is 1", atom.getVar("globalVar").get());
         assertEquals("456", atom.getVar("datumVar").get());
-        assertEquals(5, atom.getVars().size());
+        assertEquals(7, atom.getVars().size());
         assertEquals("/datum", atom.getParentPath());
         assertEquals(4, atom.getSubtypes().size());
         assertTrue(atom.getSubtypes().contains("/atom/child"));
@@ -60,13 +62,15 @@ public class PostParserTest {
 
         DmeItem datum = new DmeItem("/datum", dme);
         datum.setVar("datumVar", "456");
+        datum.setVar("expressionVar", "2 + 4");
+        datum.setQuotedVar("stringVarWithExpression", "2 + 4");
         dme.addItem(datum);
 
         DmeItem atom = new DmeItem("/atom", dme);
         atom.setVar("var1", "value1");
         atom.setVar("macrosVar", "Some TEXT goes here");
         atom.setVar("globalVar", "Current dir is NORTH");
-        atom.setVar("textVar", "\"We have TEXT in the NORTH dir\"");
+        atom.setQuotedVar("textVar", "We have TEXT in the NORTH dir");
         dme.addItem(atom);
 
         DmeItem atomChild = new DmeItem("/atom/child", dme);

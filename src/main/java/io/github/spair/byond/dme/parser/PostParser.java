@@ -1,5 +1,6 @@
 package io.github.spair.byond.dme.parser;
 
+import com.udojava.evalex.Expression;
 import io.github.spair.byond.ByondTypes;
 import io.github.spair.byond.dme.Dme;
 import io.github.spair.byond.dme.DmeItem;
@@ -12,6 +13,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 final class PostParser {
 
@@ -21,6 +23,8 @@ final class PostParser {
     private final Map<String, DmeItem> additionalCreatedItems = new HashMap<>();
     private final List<DmeItem> roots = new ArrayList<>();
     private final Set<String> itemsWithLookedVars = new HashSet<>();
+
+    private final Pattern letterPattern = Pattern.compile("[a-zA-Z]+");
 
     private PostParser(final Dme dme) {
         this.dme = dme;
@@ -36,6 +40,7 @@ final class PostParser {
             if (notGlobalObject(type)) {
                 assignParent(item);
                 replaceGlobalVarsInItemWithValues(item);
+                evaluateMathExpressionIfExist(item);
                 addToRootsIfAble(item);
             }
         });
@@ -85,6 +90,16 @@ final class PostParser {
 
     private void replaceGlobalVarsInItemWithValues(final DmeItem item) {
         item.getVars().forEach((name, value) -> item.setVar(name, WordDefineChecker.check(value, globalVars)));
+    }
+
+    private void evaluateMathExpressionIfExist(final DmeItem item) {
+        item.getVars().forEach((name, value) -> {
+            if (!value.contains("\"") && !letterPattern.matcher(value).find()
+                    && (value.contains("+") || value.contains("-") || value.contains("*") || value.contains("/"))) {
+                double newValue = new Expression(value).eval().doubleValue();
+                item.setVar(name, newValue);
+            }
+        });
     }
 
     private DmeItem determineParent(final String type) {
