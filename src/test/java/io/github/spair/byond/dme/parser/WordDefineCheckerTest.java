@@ -1,4 +1,4 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
 import org.junit.Test;
 

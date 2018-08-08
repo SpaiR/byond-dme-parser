@@ -1,4 +1,4 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -8,7 +8,7 @@ final class WordDefineChecker {
 
     private static final Pattern WORD = Pattern.compile("(?<![\\w\"/])\\w+(?![\\w\"/])");
 
-    // Used to parse every word in provided text and replace it with value from 'searchMap' if key for it found.
+    // Parse every word in provided text and replace it with value from 'searchMap' if key for it found.
     static String check(final String fullText, final Map<String, String> searchMap) {
         if (!isStringValue(fullText)) {
             Matcher m = WORD.matcher(fullText);

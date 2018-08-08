@@ -1,13 +1,15 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
 import com.eclipsesource.json.Json;
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
 import com.eclipsesource.json.JsonValue;
+import io.github.spair.byond.dme.Dme;
+import io.github.spair.byond.dme.DmeItem;
 
-import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.UncheckedIOException;
 
 final class DmeInitializer {
@@ -43,8 +45,7 @@ final class DmeInitializer {
     }
 
     private JsonObject parseInitialDmeJson() {
-        try (Reader reader = new InputStreamReader(
-                this.getClass().getClassLoader().getResourceAsStream(INITIAL_DME_FILE))) {
+        try (Reader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream(INITIAL_DME_FILE))) {
             return Json.parse(reader).asObject();
         } catch (IOException e) {
             throw new UncheckedIOException(e);

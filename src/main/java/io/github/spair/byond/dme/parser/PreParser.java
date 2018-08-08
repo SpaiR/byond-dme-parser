@@ -1,4 +1,4 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
 import java.io.File;
 import java.io.BufferedReader;
@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.ArrayDeque;
-import java.util.stream.Collectors;
 
 final class PreParser {
 
@@ -168,7 +167,15 @@ final class PreParser {
                     + syntaxStack + ".  Last line: " + lineNum + ", last col: " + colNum);
         }
 
-        return fileLines.stream().filter(line -> !line.getText().isEmpty()).collect(Collectors.toList());
+        List<FileLine> filteredFileLines = new ArrayList<>();
+
+        for (FileLine line : fileLines) {
+            if (!line.getText().isEmpty()) {
+                filteredFileLines.add(line);
+            }
+        }
+
+        return filteredFileLines;
     }
 
     private enum Syntax {

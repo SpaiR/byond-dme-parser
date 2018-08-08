@@ -1,6 +1,9 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
+import io.github.spair.byond.ByondFiles;
 import io.github.spair.byond.ByondTypes;
+import io.github.spair.byond.dme.Dme;
+import io.github.spair.byond.dme.DmeItem;
 
 import java.io.File;
 import java.util.List;
@@ -10,7 +13,6 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @SuppressWarnings("WeakerAccess")
 public final class DmeParser {
@@ -22,20 +24,11 @@ public final class DmeParser {
     private static final String DIRECTIVE_IF = "if";
     private static final String DIRECTIVE_HASHED_ENDIF = "#endif";
 
-    private static final String DME_SUFFIX = ".dme";
-    private static final String DMM_SUFFIX = ".dmm";
-
-    private static final Pattern DIRECTIVES = Pattern.compile("#(ifdef|ifndef|undef|if)[\\s]+(.+)");
-    private static final Pattern INCLUDE = Pattern.compile("#include\\s+\"(.*(?:\\.dm|\\.dme|\\.dmm))\"");
-    private static final Pattern DEFINE = Pattern.compile("^#define\\s+(\\w+)(?:\\([^)]*\\))?(?:\\s+(.+))?");
-    private static final Pattern VAR_DEFINITION = Pattern.compile(
-            "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
-
     private List<String> pathTree = new ArrayList<>();
     private Dme dme = DmeInitializer.initialize(new Dme());
 
     public static Dme parse(final File dmeFile) {
-        if (dmeFile.isFile() && dmeFile.getName().endsWith(DME_SUFFIX)) {
+        if (dmeFile.isFile() && dmeFile.getName().endsWith(ByondFiles.DME_SUFFIX)) {
             DmeParser parser = new DmeParser();
 
             parser.dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
@@ -67,7 +60,7 @@ public final class DmeParser {
                     preProcessBlocked--;
                 }
 
-                Matcher matcher = DIRECTIVES.matcher(lineText);
+                Matcher matcher = PatternHolder.directivesMatcher(lineText);
 
                 if (matcher.find()) {
                     final String macrosValue = matcher.group(2);
@@ -113,7 +106,7 @@ public final class DmeParser {
             final String type = formTypeName(fullPath);
 
             DmeItem dmeItem = dme.getItemOrCreate(type);
-            Matcher varMatcher = VAR_DEFINITION.matcher(fullPath);
+            Matcher varMatcher = PatternHolder.varDefMatcher(fullPath);
 
             if (varMatcher.find()) {
                 final String value = varMatcher.group(2);
@@ -129,7 +122,7 @@ public final class DmeParser {
     }
 
     private void addNewMacrosValueIfExist(final String lineText) {
-        Matcher matcher = DEFINE.matcher(lineText);
+        Matcher matcher = PatternHolder.defineMatcher(lineText);
 
         if (matcher.find() && matcher.group(2) != null) {
             String macrosValue = matcher.group(2).replace("$", "\\$");
@@ -138,13 +131,13 @@ public final class DmeParser {
     }
 
     private void parseIncludedFileIfExist(final String lineText, final File currentFile) {
-        Matcher matcher = INCLUDE.matcher(lineText);
+        Matcher matcher = PatternHolder.includeMatcher(lineText);
 
         if (matcher.find()) {
             String filePath = matcher.group(1).replace('\\', File.separatorChar);
             String fullFilePath = currentFile.getParentFile().getAbsolutePath() + File.separator + filePath;
 
-            if (filePath.endsWith(DMM_SUFFIX)) {
+            if (filePath.endsWith(ByondFiles.DMM_SUFFIX)) {
                 dme.addMapFile(fullFilePath);
             } else {
                 dme.addIncludedFile(fullFilePath);

@@ -1,5 +1,8 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
+import io.github.spair.byond.dme.Dme;
+import io.github.spair.byond.dme.DmeItem;
+import io.github.spair.byond.dme.ResourceUtil;
 import org.junit.Test;
 
 import java.io.File;

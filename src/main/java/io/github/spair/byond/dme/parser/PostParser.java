@@ -1,6 +1,8 @@
-package io.github.spair.byond.dme;
+package io.github.spair.byond.dme.parser;
 
 import io.github.spair.byond.ByondTypes;
+import io.github.spair.byond.dme.Dme;
+import io.github.spair.byond.dme.DmeItem;
 
 import java.util.Map;
 import java.util.HashMap;
