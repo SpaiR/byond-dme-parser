@@ -19,7 +19,8 @@ public class PostParserTest {
         assertEquals("456", datum.getVar("datumVar").get());
         assertEquals("6.0", datum.getVar("expressionVar").get());
         assertEquals("\"2 + 4\"", datum.getVar("stringVarWithExpression").get());
-        assertEquals(3, datum.getVars().size());
+        assertEquals("2 + letters", datum.getVar("expressionWithLetters").get());
+        assertEquals(4, datum.getVars().size());
         assertEquals(5, datum.getSubtypes().size());
         assertTrue(datum.getSubtypes().contains("/atom"));
         assertTrue(datum.getSubtypes().contains("/atom/child"));
@@ -33,7 +34,7 @@ public class PostParserTest {
         assertEquals("Some TEXT goes here", atom.getVar("macrosVar").get());
         assertEquals("Current dir is 1", atom.getVar("globalVar").get());
         assertEquals("456", atom.getVar("datumVar").get());
-        assertEquals(7, atom.getVars().size());
+        assertEquals(8, atom.getVars().size());
         assertEquals("/datum", atom.getParentPath());
         assertEquals(4, atom.getSubtypes().size());
         assertTrue(atom.getSubtypes().contains("/atom/child"));
@@ -64,6 +65,7 @@ public class PostParserTest {
         datum.setVar("datumVar", "456");
         datum.setVar("expressionVar", "2 + 4");
         datum.setQuotedVar("stringVarWithExpression", "2 + 4");
+        datum.setVar("expressionWithLetters", "2 + letters");
         dme.addItem(datum);
 
         DmeItem atom = new DmeItem("/atom", dme);

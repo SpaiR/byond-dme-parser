@@ -30,22 +30,22 @@ public final class DmeParser {
     private Dme dme = DmeInitializer.initialize(new Dme());
 
     public static Dme parse(final File dmeFile) {
-        if (dmeFile.isFile() && dmeFile.getName().endsWith(ByondFiles.DME_SUFFIX)) {
-            DmeParser parser = new DmeParser();
-
-            parser.dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
-            parser.doParse(dmeFile);
-            PostParser.parse(parser.dme);
-
-            return parser.dme;
-        } else {
+        if (!dmeFile.isFile() || !dmeFile.getName().endsWith(ByondFiles.DME_SUFFIX)) {
             throw new IllegalArgumentException("Parser only accept '.dme' files");
         }
+
+        DmeParser parser = new DmeParser();
+
+        parser.dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
+        parser.parseFile(dmeFile);
+        PostParser.parse(parser.dme);
+
+        return parser.dme;
     }
 
     @SuppressWarnings("checkstyle:MagicNumber")
-    private void doParse(final File file) {
-        Map<String, String> macroses = dme.getMacroses();
+    private void parseFile(final File file) {
+        final Map<String, String> macroses = dme.getMacroses();
 
         Deque<Boolean> preProcessStack = new ArrayDeque<>();
         int preProcessBlocked = 0;
@@ -143,7 +143,7 @@ public final class DmeParser {
                 dme.addMapFile(fullFilePath);
             } else {
                 dme.addIncludedFile(fullFilePath);
-                doParse(new File(fullFilePath));
+                parseFile(new File(fullFilePath));
             }
         }
     }
@@ -164,7 +164,7 @@ public final class DmeParser {
             String item = pathTree.get(i);
 
             if (item != null && !item.isEmpty()) {
-                if (item.startsWith("/")) {
+                if (item.charAt(0) == '/') {
                     fullPath = new StringBuilder(item);
                 } else {
                     fullPath.append('/').append(item);

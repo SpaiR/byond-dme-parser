@@ -25,6 +25,7 @@ final class PostParser {
     private final Set<String> itemsWithLookedVars = new HashSet<>();
 
     private final Pattern letterPattern = Pattern.compile("[a-zA-Z]+");
+    private final String[] mathSymbols = {"+", "-", "*", "/"};
 
     private PostParser(final Dme dme) {
         this.dme = dme;
@@ -94,12 +95,24 @@ final class PostParser {
 
     private void evaluateMathExpressionIfExist(final DmeItem item) {
         item.getVars().forEach((name, value) -> {
-            if (!value.contains("\"") && !letterPattern.matcher(value).find()
-                    && (value.contains("+") || value.contains("-") || value.contains("*") || value.contains("/"))) {
+            if (noLetterMarkers(value) && hasMathMarkers(value)) {
                 double newValue = new Expression(value).eval().doubleValue();
                 item.setVar(name, newValue);
             }
         });
+    }
+
+    private boolean noLetterMarkers(final String text) {
+        return !text.contains("\"") && !text.contains("'") && !letterPattern.matcher(text).find();
+    }
+
+    private boolean hasMathMarkers(final String text) {
+        for (String mathSymbol : mathSymbols) {
+            if (text.contains(mathSymbol)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private DmeItem determineParent(final String type) {

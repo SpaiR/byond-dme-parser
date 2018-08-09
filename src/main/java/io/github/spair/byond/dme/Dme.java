@@ -33,13 +33,6 @@ public class Dme {
         return VarUtil.optionalNullable(macroses.get(name));
     }
 
-    /**
-     * Method returns macros value without first and last character.
-     * It's implied that those chars will be single or double quotes.
-     *
-     * @param name macros name to get
-     * @return unwrapped macros value
-     */
     public Optional<String> getMacrosUnquoted(final String name) {
         return VarUtil.optionalUnquoted(macroses.get(name));
     }

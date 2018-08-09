@@ -29,11 +29,11 @@ final class WordDefineChecker {
     }
 
     private static boolean isStringValue(final String value) {
-        return startsAndEndsWith(value, "\"") || startsAndEndsWith(value, "'");
+        return startsAndEndsWith(value, '"') || startsAndEndsWith(value, '\'');
     }
 
-    private static boolean startsAndEndsWith(final String str, final String c) {
-        return str.startsWith(c) && str.endsWith(c);
+    private static boolean startsAndEndsWith(final String str, final char c) {
+        return str.charAt(0) == c && str.charAt(str.length() - 1) == c;
     }
 
     private WordDefineChecker() {
