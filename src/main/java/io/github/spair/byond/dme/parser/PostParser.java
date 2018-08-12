@@ -4,6 +4,7 @@ import com.udojava.evalex.Expression;
 import io.github.spair.byond.ByondTypes;
 import io.github.spair.byond.dme.Dme;
 import io.github.spair.byond.dme.DmeItem;
+import lombok.val;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ final class PostParser {
     private final Set<String> itemsWithLookedVars = new HashSet<>();
 
     private final Pattern letterPattern = Pattern.compile("[a-zA-Z]+");
+    private final Pattern numberPattern = Pattern.compile("\\d+");
     private final String[] mathSymbols = {"+", "-", "*", "/"};
 
     private PostParser(final Dme dme) {
@@ -96,8 +98,11 @@ final class PostParser {
     private void evaluateMathExpressionIfExist(final DmeItem item) {
         item.getVars().forEach((name, value) -> {
             if (noLetterMarkers(value) && hasMathMarkers(value)) {
-                double newValue = new Expression(value).eval().doubleValue();
-                item.setVar(name, newValue);
+                try {
+                    double newValue = new Expression(value).eval().doubleValue();
+                    item.setVar(name, newValue);
+                } catch (Exception ignored) {
+                }
             }
         });
     }
@@ -109,7 +114,12 @@ final class PostParser {
     private boolean hasMathMarkers(final String text) {
         for (String mathSymbol : mathSymbols) {
             if (text.contains(mathSymbol)) {
-                return true;
+                val m = numberPattern.matcher(text);
+                int matchCount = 0;
+                while (m.find()) {
+                    matchCount++;
+                }
+                return matchCount > 1;
             }
         }
         return false;
