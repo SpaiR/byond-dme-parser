@@ -1,5 +1,8 @@
 package io.github.spair.byond.dme.parser;
 
+import lombok.val;
+import lombok.var;
+
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -7,7 +10,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.ArrayDeque;
 
 final class PreParser {
@@ -54,34 +56,28 @@ final class PreParser {
     }
 
     private static List<FileLine> doParse(final String text, final String fileName) {
-        Deque<Syntax> syntaxStack = new ArrayDeque<>();
-        List<FileLine> fileLines = new ArrayList<>();
-        FileLine.Builder builder = FileLine.builder();
+        val syntaxStack = new ArrayDeque<Syntax>();
+        val fileLines = new ArrayList<FileLine>();
+        var fileLineBuilder = FileLine.builder();
 
         boolean hasNonWhitespace = false;
         int indentLevel = 0;
-        int lineNum = 0;
-        int colNum = 0;
 
         for (int charIndex = 0; charIndex < text.length() - 1; charIndex++) {
-            colNum++;
-
             final char currentChar = text.charAt(charIndex);
             final char nextChar = text.charAt(charIndex + 1);
 
             final Syntax currentSyntax = syntaxStack.size() > 0 ? syntaxStack.getLast() : null;
 
-            final boolean inString = currentSyntax == Syntax.STRING || currentSyntax == Syntax.MULTI_STRING;
-            final boolean inComment = currentSyntax == Syntax.COMMENT || currentSyntax == Syntax.MULTI_COMMENT;
+            final boolean inString = (currentSyntax == Syntax.STRING || currentSyntax == Syntax.MULTI_STRING);
+            final boolean inComment = (currentSyntax == Syntax.COMMENT || currentSyntax == Syntax.MULTI_COMMENT);
 
             if (currentChar == BACKSLASH && nextChar != NEW_LINE && inString) {
-                builder.append(currentChar).append(nextChar);
+                fileLineBuilder.append(currentChar).append(nextChar);
                 charIndex++;
                 continue;
             } else if (currentChar == NEW_LINE || (currentChar == BACKSLASH && nextChar == NEW_LINE)) {
                 hasNonWhitespace = false;
-                lineNum++;
-                colNum = 0;
                 indentLevel = 0;
 
                 if (inComment && currentSyntax == Syntax.COMMENT) {
@@ -89,16 +85,16 @@ final class PreParser {
                 }
 
                 if (!inComment && currentChar == BACKSLASH) {
-                    builder.append(SPACE);
+                    fileLineBuilder.append(SPACE);
                     charIndex++;
                 } else if (syntaxStack.isEmpty()) {
-                    FileLine line = builder.build();
+                    FileLine line = fileLineBuilder.build();
                     fileLines.add(line);
-                    builder = FileLine.builder();
+                    fileLineBuilder = FileLine.builder();
                 } else if (currentSyntax == Syntax.MULTI_STRING) {
-                    builder.append(NEW_LINE_ESCAPE);
+                    fileLineBuilder.append(NEW_LINE_ESCAPE);
                 } else if (!inString) {
-                    builder.append(SPACE);
+                    fileLineBuilder.append(SPACE);
                 }
 
                 continue;
@@ -134,37 +130,35 @@ final class PreParser {
             } else if (currentChar == LEFT_FIGURE_BRACKET && nextChar == QUOTE && !inString) {
                 syntaxStack.addLast(Syntax.MULTI_STRING);
                 charIndex++;
-                builder.append(QUOTE_ESCAPE);
+                fileLineBuilder.append(QUOTE_ESCAPE);
                 continue;
-            } else if (currentChar == QUOTE && nextChar == RIGHT_FIGURE_BRACKET
-                    && currentSyntax == Syntax.MULTI_STRING) {
+            } else if (currentChar == QUOTE && nextChar == RIGHT_FIGURE_BRACKET) {
                 syntaxStack.pollLast();
                 charIndex++;
-                builder.append(QUOTE_ESCAPE);
+                fileLineBuilder.append(QUOTE_ESCAPE);
                 continue;
-            } else if (currentChar == QUOTE && currentSyntax == Syntax.MULTI_STRING) {
-                builder.append(QUOTE_ESCAPE_EXTRA);
+            } else if (currentChar == QUOTE) {
+                fileLineBuilder.append(QUOTE_ESCAPE_EXTRA);
                 continue;
             }
             if ((currentChar != SPACE && currentChar != TAB) || hasNonWhitespace) {
-                builder.append(currentChar);
+                fileLineBuilder.append(currentChar);
             }
             if (currentChar != SPACE && currentChar != TAB && !hasNonWhitespace) {
                 hasNonWhitespace = true;
 
-                if (builder.hasNoIndent()) {
-                    builder.setIndentLevel(indentLevel);
+                if (fileLineBuilder.hasNoIndent()) {
+                    fileLineBuilder.setIndentLevel(indentLevel);
                 }
             } else if (!hasNonWhitespace) {
                 indentLevel++;
             }
         }
 
-        fileLines.add(builder.build());
+        fileLines.add(fileLineBuilder.build());
 
         if (syntaxStack.size() > 0) {
-            throw new RuntimeException("Syntax stack not empty in file " + fileName + "! Stack: "
-                    + syntaxStack + ".  Last line: " + lineNum + ", last col: " + colNum);
+            throw new RuntimeException("Syntax stack is not empty in file " + fileName + "! Stack: " + syntaxStack);
         }
 
         List<FileLine> filteredFileLines = new ArrayList<>();

@@ -191,10 +191,10 @@ public final class DmeParser {
         return typeName.length() > 0 ? typeName.toString() : ByondTypes.GLOBAL;
     }
 
-    private boolean notPartOfTypeName(final String item) {
-        return item.contains("=") || item.contains("(")
-                || "var".equals(item) || "proc".equals(item) || "global".equals(item)
-                || "static".equals(item) || "tmp".equals(item) || "verb".equals(item);
+    private boolean notPartOfTypeName(final String pathPart) {
+        return pathPart.contains("=") || pathPart.contains("(")
+                || "var".equals(pathPart) || "proc".equals(pathPart) || "global".equals(pathPart)
+                || "static".equals(pathPart) || "tmp".equals(pathPart) || "verb".equals(pathPart);
     }
 
     private DmeParser() {

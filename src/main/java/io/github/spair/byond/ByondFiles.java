@@ -1,5 +1,6 @@
 package io.github.spair.byond;
 
+@SuppressWarnings("unused")
 public final class ByondFiles {
 
     public static final String DME_SUFFIX = ".dme";

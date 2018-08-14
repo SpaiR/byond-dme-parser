@@ -92,8 +92,9 @@ final class DmeInitializer {
                     item.setQuotedVar(name, stringValue);
                 }
             } else {
-                throw new IllegalArgumentException("Unknown type of variable found in JSON."
-                        + " Name: " + name + ", value: " + value);
+                throw new IllegalArgumentException(
+                        "Unknown type of variable found in JSON. Name: " + name + ", value: " + value
+                );
             }
         });
 

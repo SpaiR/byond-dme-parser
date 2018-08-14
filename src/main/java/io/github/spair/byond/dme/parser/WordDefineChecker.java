@@ -1,5 +1,7 @@
 package io.github.spair.byond.dme.parser;
 
+import lombok.val;
+
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,11 +17,8 @@ final class WordDefineChecker {
             StringBuffer output = new StringBuffer();
 
             while (m.find()) {
-                if (searchMap.containsKey(m.group(0))) {
-                    m.appendReplacement(output, searchMap.get(m.group(0)));
-                } else {
-                    m.appendReplacement(output, m.group(0));
-                }
+                val parsedWord = m.group(0);
+                m.appendReplacement(output, searchMap.getOrDefault(parsedWord, parsedWord));
             }
 
             return m.appendTail(output).toString();

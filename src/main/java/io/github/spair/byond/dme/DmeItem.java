@@ -40,7 +40,7 @@ public class DmeItem {
 
         if (!result) {
             DmeItem itemToCompare = environment.getItem(typeToCompare);
-            result = itemToCompare != null && itemToCompare.subtypes.contains(type);
+            result = (itemToCompare != null && itemToCompare.subtypes.contains(type));
         }
 
         return result;

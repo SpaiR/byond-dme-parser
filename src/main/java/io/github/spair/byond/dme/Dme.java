@@ -58,9 +58,7 @@ public class Dme {
     }
 
     public DmeItem getItemOrCreate(final String type) {
-        DmeItem item = items.getOrDefault(type, new DmeItem(type, this));
-        items.putIfAbsent(type, item);
-        return item;
+        return items.computeIfAbsent(type, k -> new DmeItem(type, this));
     }
 
     public DmeItem getItem(final String type) {
