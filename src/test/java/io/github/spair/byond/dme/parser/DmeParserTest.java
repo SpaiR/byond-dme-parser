@@ -30,9 +30,4 @@ public class DmeParserTest {
 
         assertTrue(!dme.getMapFiles().isEmpty());
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testParseWithWrongFile() {
-        DmeParser.parse(ResourceUtil.readResourceFile("test_file.txt"));
-    }
 }

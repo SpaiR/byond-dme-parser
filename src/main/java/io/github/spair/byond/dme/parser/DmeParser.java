@@ -30,10 +30,6 @@ public final class DmeParser {
     private Dme dme = DmeInitializer.initialize(new Dme());
 
     public static Dme parse(final File dmeFile) {
-        if (!dmeFile.isFile() || !dmeFile.getName().endsWith(ByondFiles.DME_SUFFIX)) {
-            throw new IllegalArgumentException("Parser only accept '.dme' files");
-        }
-
         DmeParser parser = new DmeParser();
 
         parser.dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
