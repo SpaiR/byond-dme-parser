@@ -2,7 +2,7 @@ package io.github.spair.byond;
 
 import java.util.Optional;
 
-public final class VarUtil {
+public final class VarWrapper {
 
     public static Optional<String> optionalNullable(final String var) {
         return Optional.ofNullable(var);
@@ -24,6 +24,6 @@ public final class VarUtil {
         return var == null || ByondTypes.NULL.equals(var) || var.isEmpty();
     }
 
-    private VarUtil() {
+    private VarWrapper() {
     }
 }

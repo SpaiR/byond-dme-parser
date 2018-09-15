@@ -25,7 +25,7 @@ final class PostParser {
     private final List<DmeItem> roots = new ArrayList<>();
     private final Set<String> itemsWithLookedVars = new HashSet<>();
 
-    private final Pattern letterPattern = Pattern.compile("[a-zA-Z]+");
+    private final Pattern letterPattern = Pattern.compile("[a-zA-Zа-яА-Я]+");
     private final Pattern numberPattern = Pattern.compile("\\d+");
     private final String[] mathSymbols = {"+", "-", "*", "/"};
 

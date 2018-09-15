@@ -1,7 +1,7 @@
 package io.github.spair.byond.dme;
 
 import io.github.spair.byond.ByondTypes;
-import io.github.spair.byond.VarUtil;
+import io.github.spair.byond.VarWrapper;
 import lombok.Data;
 
 import java.util.Map;
@@ -18,7 +18,7 @@ public class Dme {
     private String absoluteRootPath;
     private Map<String, String> macroses = new HashMap<>();
     private List<String> includedFiles = new ArrayList<>();
-    private List<MapFile> mapFiles = new ArrayList<>();
+    private List<String> mapFiles = new ArrayList<>();
     private Map<String, DmeItem> items = new TreeMap<>();
 
     public void addMacros(final String name, final String value) {
@@ -30,19 +30,19 @@ public class Dme {
     }
 
     public Optional<String> getMacros(final String name) {
-        return VarUtil.optionalNullable(macroses.get(name));
+        return VarWrapper.optionalNullable(macroses.get(name));
     }
 
     public Optional<String> getMacrosUnquoted(final String name) {
-        return VarUtil.optionalUnquoted(macroses.get(name));
+        return VarWrapper.optionalUnquoted(macroses.get(name));
     }
 
     public Optional<Integer> getMacrosAsInt(final String name) {
-        return VarUtil.optionalInt(macroses.get(name));
+        return VarWrapper.optionalInt(macroses.get(name));
     }
 
     public Optional<Double> getMacrosAsDouble(final String name) {
-        return VarUtil.optionalDouble(macroses.get(name));
+        return VarWrapper.optionalDouble(macroses.get(name));
     }
 
     public void addIncludedFile(final String filePath) {
@@ -50,7 +50,7 @@ public class Dme {
     }
 
     public void addMapFile(final String filePath) {
-        mapFiles.add(new MapFile(filePath));
+        mapFiles.add(filePath);
     }
 
     public void addItem(final DmeItem item) {
@@ -70,18 +70,18 @@ public class Dme {
     }
 
     public Optional<String> getGlobalVar(final String name) {
-        return VarUtil.optionalNullable(getGlobalVars().get(name));
+        return VarWrapper.optionalNullable(getGlobalVars().get(name));
     }
 
     public Optional<String> getGlobalVarUnquoted(final String name) {
-        return VarUtil.optionalUnquoted(getGlobalVars().get(name));
+        return VarWrapper.optionalUnquoted(getGlobalVars().get(name));
     }
 
     public Optional<Integer> getGlobalVarAsInt(final String name) {
-        return VarUtil.optionalInt(getGlobalVars().get(name));
+        return VarWrapper.optionalInt(getGlobalVars().get(name));
     }
 
     public Optional<Double> getGlobalVarAsDouble(final String name) {
-        return VarUtil.optionalDouble(getGlobalVars().get(name));
+        return VarWrapper.optionalDouble(getGlobalVars().get(name));
     }
 }

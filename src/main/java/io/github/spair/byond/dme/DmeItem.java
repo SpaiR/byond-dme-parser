@@ -1,7 +1,7 @@
 package io.github.spair.byond.dme;
 
 import io.github.spair.byond.ByondTypes;
-import io.github.spair.byond.VarUtil;
+import io.github.spair.byond.VarWrapper;
 import lombok.Data;
 import lombok.ToString;
 import lombok.Setter;
@@ -73,7 +73,7 @@ public class DmeItem {
     }
 
     public Optional<String> getVar(final String name) {
-        return VarUtil.optionalNullable(vars.get(name));
+        return VarWrapper.optionalNullable(vars.get(name));
     }
 
     /**
@@ -84,15 +84,15 @@ public class DmeItem {
      * @return unwrapped variable
      */
     public Optional<String> getVarUnquoted(final String name) {
-        return VarUtil.optionalUnquoted(vars.get(name));
+        return VarWrapper.optionalUnquoted(vars.get(name));
     }
 
     public Optional<Integer> getVarAsInt(final String name) {
-        return VarUtil.optionalInt(vars.get(name));
+        return VarWrapper.optionalInt(vars.get(name));
     }
 
     public Optional<Double> getVarAsDouble(final String name) {
-        return VarUtil.optionalDouble(vars.get(name));
+        return VarWrapper.optionalDouble(vars.get(name));
     }
 
     public void addSubtype(final DmeItem item) {
