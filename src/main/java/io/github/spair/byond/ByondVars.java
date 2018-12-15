@@ -2,6 +2,7 @@ package io.github.spair.byond;
 
 /**
  * Constants with all built in BYOND variable names.
+ * <p>Relevant for <b>12.12.2018</b>
  */
 @SuppressWarnings("unused")
 public final class ByondVars {
