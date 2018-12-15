@@ -7,10 +7,7 @@ import io.github.spair.byond.dme.DmeItem;
 import lombok.Getter;
 
 import java.io.File;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.regex.Matcher;
@@ -31,7 +28,7 @@ final class Parser {
     private final Pattern varDefinition = Pattern.compile(
             "^[/\\w]+(?:var(?:/[\\w/]+)?)?/(\\w+)\\s*=\\s*(.+)|^[/\\w]+(?:var(?:/[\\w/]+)?)/(\\w+)");
 
-    private List<String> pathTree = new ArrayList<>();
+    private String[] pathTree = new String[10];
 
     @Getter
     private Dme dme;
@@ -146,19 +143,21 @@ final class Parser {
     }
 
     private void checkPathTreeSize(final int expectedSize) {
-        if (pathTree.size() < expectedSize) {
-            pathTree.addAll(Collections.nCopies(expectedSize - pathTree.size(), ""));
+        if (pathTree.length < expectedSize) {
+            String[] newPathTree = new String[expectedSize];
+            System.arraycopy(pathTree, 0, newPathTree, 0, pathTree.length);
+            pathTree = newPathTree;
         }
     }
 
     private String formFullPath(final FileLine line) {
         checkPathTreeSize(line.getIndentLevel() + 1);
 
-        pathTree.set(line.getIndentLevel(), line.getText());
+        pathTree[line.getIndentLevel()] = line.getText();
         StringBuilder fullPath = new StringBuilder();
 
         for (int i = 0; i < line.getIndentLevel() + 1; i++) {
-            String item = pathTree.get(i);
+            String item = pathTree[i];
 
             if (item != null && !item.isEmpty()) {
                 if (item.charAt(0) == '/') {
