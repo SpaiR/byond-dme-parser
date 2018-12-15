@@ -9,7 +9,6 @@ import java.io.File;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("ConstantConditions")
 public class DmeParserTest {
 
     @Test
