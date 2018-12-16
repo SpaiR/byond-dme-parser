@@ -3,7 +3,16 @@ package io.github.spair.byond.dme;
 import io.github.spair.byond.ByondTypes;
 import io.github.spair.byond.VarWrapper;
 import lombok.Data;
+import lombok.val;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +30,33 @@ public class Dme {
     private final List<String> includedFiles = new ArrayList<>();
     private final List<String> mapFiles = new ArrayList<>();
 
+    public void mergeWithJson(final File jsonFile) {
+        try {
+            mergeWithJson(new String(Files.readAllBytes(jsonFile.toPath()), Charset.defaultCharset()));
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public void mergeWithJson(final String json) {
+        DmeJsonMerger.merge(json, this);
+    }
+
+    public void mergeWithJson(final InputStream is) {
+        val bis = new BufferedInputStream(is);
+        val buf = new ByteArrayOutputStream();
+        try {
+            int result;
+            while ((result = bis.read()) != -1) {
+                byte b = (byte) result;
+                buf.write(b);
+            }
+            mergeWithJson(buf.toString());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
     ///////////////// Macros
 
     public void addMacros(final String name, final String value) {
@@ -28,7 +64,7 @@ public class Dme {
     }
 
     public void addMacros(final String name, final Number value) {
-        macroses.put(name, value.toString());
+        macroses.put(name, String.valueOf(value));
     }
 
     public void addMacrosText(final String name, final String value) {

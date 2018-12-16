@@ -1,0 +1,19 @@
+{
+  "macroses": {
+    "NUMBER_MACROS": 100,
+    "TEXT_MACROS": "{text}one hundred",
+    "RAW_MACROS": "one hundred"
+  },
+  "definitions": [
+    {
+      "type": "/obj",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "number_var": 100,
+        "text_var": "{text}one hundred",
+        "raw_var": "one hundred"
+      }
+    }
+  ]
+}

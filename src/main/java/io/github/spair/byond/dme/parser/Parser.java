@@ -10,10 +10,13 @@ import java.io.File;
 import java.util.Map;
 import java.util.Deque;
 import java.util.ArrayDeque;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class Parser {
+
+    private static final String INITIAL_DME_FILE = "initial_dme.json";
 
     private static final String DIRECTIVE_HASH = "#";
     private static final String DIRECTIVE_UNDEF = "undef";
@@ -34,7 +37,8 @@ final class Parser {
     private Dme dme;
 
     Parser(final File dmeFile) {
-        dme = DmeInitializer.initialize(new Dme());
+        dme = new Dme();
+        dme.mergeWithJson(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(INITIAL_DME_FILE)));
         dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
     }
 
@@ -181,7 +185,7 @@ final class Parser {
                 break;
             }
 
-            typeName.append("/").append(pathPart);
+            typeName.append('/').append(pathPart);
         }
 
         return typeName.length() > 0 ? typeName.toString() : ByondTypes.GLOBAL;

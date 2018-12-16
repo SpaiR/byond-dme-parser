@@ -124,10 +124,10 @@
         "TRUE": 1,
         "FALSE": 0,
   
-        "MALE": "male",
-        "FEMALE": "female",
-        "NEUTER": "neuter",
-        "PLURAL": "plural",
+        "MALE": "{text}male",
+        "FEMALE": "{text}female",
+        "NEUTER": "{text}neuter",
+        "PLURAL": "{text}plural",
   
         "MOUSE_INACTIVE_POINTER": 0,
         "MOUSE_ACTIVE_POINTER": 1,
@@ -144,8 +144,8 @@
         "MOUSE_SHIFT_KEY": 16,
         "MOUSE_ALT_KEY": 32,
   
-        "MS_WINDOWS": "MS Windows",
-        "UNIX": "UNIX",
+        "MS_WINDOWS": "{text}MS Windows",
+        "UNIX": "{text}UNIX",
   
         "_DM_datum": 1,
         "_DM_atom": 2,
@@ -288,7 +288,7 @@
         "density": 0,
         "desc": null,
         "dir": 2,
-        "gender": "neuter",
+        "gender": "{text}neuter",
         "icon": null,
         "icon_state": null,
         "infra_luminosity": 0,
@@ -384,9 +384,9 @@
       "parent": "",
       "subtypes": [],
       "vars": {
-        "area": "/area",
-        "turf": "/turf",
-        "mob": "/mob",
+        "area": "{text}/area",
+        "turf": "{text}/turf",
+        "mob": "{text}/mob",
         "icon_size": 32
       }
     }

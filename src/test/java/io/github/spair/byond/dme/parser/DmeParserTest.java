@@ -16,6 +16,11 @@ public class DmeParserTest {
         File testDmeFile = ResourceUtil.readResourceFile("test_dme.dme");
         Dme dme = DmeParser.parse(testDmeFile);
 
+        assertEquals(64, dme.getMacroses().size());
+        assertEquals(17, dme.getItems().size());
+        assertEquals(3, dme.getIncludedFiles().size());
+        assertEquals(3, dme.getMapFiles().size());
+
         assertEquals(dme.getAbsoluteRootPath(), testDmeFile.getParent());
 
         DmeItem item = dme.getItem("/obj/item");
