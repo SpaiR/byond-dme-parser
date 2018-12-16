@@ -29,16 +29,12 @@ final class PostParser {
     private final Pattern numberPattern = Pattern.compile("\\d+");
     private final String[] mathSymbols = {"+", "-", "*", "/"};
 
-    private PostParser(final Dme dme) {
+    PostParser(final Dme dme) {
         this.dme = dme;
         this.globalVars = dme.getGlobalVars();
     }
 
-    static void parse(final Dme dme) {
-        new PostParser(dme).doParse();
-    }
-
-    private void doParse() {
+    void doParse() {
         dme.getItems().forEach((type, item) -> {
             if (notGlobalObject(type)) {
                 assignParent(item);

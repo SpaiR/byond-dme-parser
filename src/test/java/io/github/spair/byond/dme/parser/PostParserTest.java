@@ -12,7 +12,7 @@ public class PostParserTest {
     @Test
     public void testDoParse() {
         Dme dme = prepareDme();
-        PostParser.parse(dme);
+        new PostParser(dme).doParse();
 
         DmeItem datum = dme.getItem("/datum");
         assertEquals("456", datum.getVar("datumVar"));

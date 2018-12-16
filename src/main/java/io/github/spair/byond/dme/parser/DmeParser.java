@@ -10,7 +10,7 @@ public final class DmeParser {
         Parser parser = new Parser(dmeFile);
         parser.parseFile(dmeFile);
         Dme dme = parser.getDme();
-        PostParser.parse(dme);
+        new PostParser(dme).doParse();
         return dme;
     }
 
