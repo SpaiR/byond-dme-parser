@@ -35,16 +35,16 @@ final class Parser {
 
     @Getter
     private Dme dme;
+    private final Map<String, String> macroses;
 
     Parser(final File dmeFile) {
         dme = new Dme();
         dme.mergeWithJson(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(INITIAL_DME_FILE)));
         dme.setAbsoluteRootPath(dmeFile.getParentFile().getAbsolutePath());
+        macroses = dme.getMacroses();
     }
 
     void parseFile(final File file) {
-        final Map<String, String> macroses = dme.getMacroses();
-
         Deque<Boolean> preProcessStack = new ArrayDeque<>();
         int preProcessBlocked = 0;
 

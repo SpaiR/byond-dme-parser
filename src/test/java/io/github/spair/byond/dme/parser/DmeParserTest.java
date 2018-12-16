@@ -20,18 +20,15 @@ public class DmeParserTest {
         assertEquals(17, dme.getItems().size());
         assertEquals(3, dme.getIncludedFiles().size());
         assertEquals(3, dme.getMapFiles().size());
+        assertEquals(77, dme.getGlobalVars().size());
 
         assertEquals(dme.getAbsoluteRootPath(), testDmeFile.getParent());
 
         DmeItem item = dme.getItem("/obj/item");
+
         assertNotNull(item);
         assertEquals("1", item.getVar("custom_var"));
         assertEquals("/obj", item.getParentPath());
         assertTrue(item.getSubtypes().isEmpty());
-
-        assertTrue(!dme.getMacroses().isEmpty());
-        assertTrue(!dme.getGlobalVars().isEmpty());
-
-        assertTrue(!dme.getMapFiles().isEmpty());
     }
 }
