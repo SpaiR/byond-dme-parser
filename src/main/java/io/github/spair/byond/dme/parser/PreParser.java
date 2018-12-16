@@ -37,7 +37,8 @@ final class PreParser {
         StringBuilder text = new StringBuilder();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            reader.lines().forEach(line -> {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 text.append(line);
 
                 if (line.endsWith("\\")) {
@@ -45,7 +46,7 @@ final class PreParser {
                 } else {
                     text.append(NEW_LINE);
                 }
-            });
+            }
 
             text.append(NEW_LINE);
         } catch (IOException e) {
