@@ -44,8 +44,7 @@ public class Dme {
 
     public void mergeWithJson(final InputStream is) {
         val bis = new BufferedInputStream(is);
-        val buf = new ByteArrayOutputStream();
-        try {
+        try (val buf = new ByteArrayOutputStream()) {
             int result;
             while ((result = bis.read()) != -1) {
                 byte b = (byte) result;
