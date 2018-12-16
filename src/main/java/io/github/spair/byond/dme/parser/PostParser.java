@@ -12,8 +12,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 final class PostParser {
@@ -23,10 +21,10 @@ final class PostParser {
 
     private final Map<String, DmeItem> additionalCreatedItems = new HashMap<>();
     private final List<DmeItem> roots = new ArrayList<>();
-    private final Set<String> itemsWithLookedVars = new HashSet<>();
 
     private final Pattern letterPattern = Pattern.compile("[a-zA-Zа-яА-Я]+");
     private final Pattern numberPattern = Pattern.compile("\\d+");
+
     private final String[] mathSymbols = {"+", "-", "*", "/"};
 
     PostParser(final Dme dme) {
@@ -35,21 +33,17 @@ final class PostParser {
     }
 
     void doParse() {
-        dme.getItems().forEach((type, item) -> {
-            if (notGlobalObject(type)) {
+        for (val itemEntry : dme.getItems().entrySet()) {
+            val item = itemEntry.getValue();
+            if (!ByondTypes.GLOBAL.equals(itemEntry.getKey())) {
                 assignParent(item);
                 replaceGlobalVarsInItemWithValues(item);
                 evaluateMathExpressionIfExist(item);
                 addToRootsIfAble(item);
             }
-        });
-
+        }
         addAdditionalItemsToDme();
-
-        executeAsync(
-                CompletableFuture.runAsync(this::assignAllSubtypesFromRoots),
-                CompletableFuture.runAsync(this::lookupAllParentsVars)
-        );
+        assignAllSubtypesFromRoots();
     }
 
     private void assignParent(final DmeItem item) {
@@ -60,47 +54,40 @@ final class PostParser {
 
     // Makes parents to know about every existed subtype.
     private void assignAllSubtypesFromRoots() {
-        roots.forEach(this::setAndReturnAllSubtypes);
+        for (val root : roots) {
+            setAndReturnAllSubtypes(root);
+        }
     }
 
     private Set<String> setAndReturnAllSubtypes(final DmeItem item) {
         Set<String> tempSubtypes = new HashSet<>();
         Set<String> itemSubtypes = item.getSubtypes();
 
-        itemSubtypes.forEach(subtype -> tempSubtypes.addAll(setAndReturnAllSubtypes(dme.getItem(subtype))));
+        for (val subtype : itemSubtypes) {
+            tempSubtypes.addAll(setAndReturnAllSubtypes(dme.getItem(subtype)));
+        }
         itemSubtypes.addAll(tempSubtypes);
 
         return itemSubtypes;
     }
 
-    private void lookupAllParentsVars() {
-        dme.getItems().forEach((type, item) -> lookUpVars(item, dme.getItem(item.getParentPath())));
-    }
-
-    private void lookUpVars(final DmeItem item, final DmeItem parent) {
-        if (parent != null) {
-            if (!itemsWithLookedVars.contains(parent.getType()) && hasParent(parent.getType())) {
-                lookUpVars(parent, dme.getItem(parent.getParentPath()));
-            }
-            parent.getVars().forEach(item.getVars()::putIfAbsent);
-            itemsWithLookedVars.add(item.getType());
+    private void replaceGlobalVarsInItemWithValues(final DmeItem item) {
+        for (val varEntry : item.getVars().entrySet()) {
+            item.setVar(varEntry.getKey(), WordDefineChecker.check(varEntry.getValue(), globalVars));
         }
     }
 
-    private void replaceGlobalVarsInItemWithValues(final DmeItem item) {
-        item.getVars().forEach((name, value) -> item.setVar(name, WordDefineChecker.check(value, globalVars)));
-    }
-
     private void evaluateMathExpressionIfExist(final DmeItem item) {
-        item.getVars().forEach((name, value) -> {
+        for (val varEntry : item.getVars().entrySet()) {
+            val value = varEntry.getValue();
             if (noLetterMarkers(value) && hasMathMarkers(value)) {
                 try {
                     double newValue = new Expression(value).eval().doubleValue();
-                    item.setVar(name, newValue);
+                    item.setVar(varEntry.getKey(), newValue);
                 } catch (Exception ignored) {
                 }
             }
-        });
+        }
     }
 
     private boolean noLetterMarkers(final String text) {
@@ -108,7 +95,7 @@ final class PostParser {
     }
 
     private boolean hasMathMarkers(final String text) {
-        for (String mathSymbol : mathSymbols) {
+        for (val mathSymbol : mathSymbols) {
             if (text.contains(mathSymbol)) {
                 val m = numberPattern.matcher(text);
                 int matchCount = 0;
@@ -165,21 +152,11 @@ final class PostParser {
         );
     }
 
-    private boolean notGlobalObject(final String type) {
-        return !ByondTypes.GLOBAL.equals(type);
-    }
-
     // During parent determining additional items are created. They are not declared in project,
     // and exist in form of intermediate objects, but they should exist in Dme.
     private void addAdditionalItemsToDme() {
-        additionalCreatedItems.values().forEach(dme::addItem);
-    }
-
-    private void executeAsync(final CompletableFuture... futures) {
-        try {
-            CompletableFuture.allOf(futures).get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
+        for (val dmeItem : additionalCreatedItems.values()) {
+            dme.addItem(dmeItem);
         }
     }
 }

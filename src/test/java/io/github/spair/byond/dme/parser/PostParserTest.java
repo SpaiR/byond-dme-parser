@@ -33,6 +33,8 @@ public class PostParserTest {
         assertEquals("Some TEXT goes here", atom.getVar("macrosVar"));
         assertEquals("Current dir is 1", atom.getVar("globalVar"));
         assertEquals("456", atom.getVar("datumVar"));
+        assertEquals(5, atom.getVars().size());
+        assertEquals(8, atom.getAllVars().size());
         assertEquals(8, atom.getVars().size());
         assertEquals("/datum", atom.getParentPath());
         assertEquals(4, atom.getSubtypes().size());

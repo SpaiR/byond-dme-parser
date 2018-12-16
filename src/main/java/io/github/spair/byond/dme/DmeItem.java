@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.Getter;
 import lombok.EqualsAndHashCode;
 import lombok.AccessLevel;
+import lombok.val;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -28,6 +29,9 @@ public class DmeItem {
 
     private final Map<String, String> vars = new HashMap<>();
     private final Set<String> subtypes = new HashSet<>();
+
+    @Getter(AccessLevel.NONE)
+    private boolean varsLookedUp = false;
 
     public DmeItem(final String type, final Dme environment) {
         this.type = type;
@@ -79,23 +83,49 @@ public class DmeItem {
         vars.put(name, ByondTypes.NULL);
     }
 
+    public Map<String, String> getAllVars() {
+        if (!varsLookedUp && !parentPath.isEmpty()) {
+            lookUpVars(this, environment.getItem(parentPath));
+            varsLookedUp = true;
+        }
+        return vars;
+    }
+
     public String getVar(final String name) {
-        return VarWrapper.rawValue(vars.get(name));
+        return VarWrapper.rawValue(lookupVar(name));
     }
 
     public Optional<String> getVarText(final String name) {
-        return VarWrapper.optionalText(vars.get(name));
+        return VarWrapper.optionalText(lookupVar(name));
     }
 
     public Optional<String> getVarFilePath(final String name) {
-        return VarWrapper.optionalFilePath(vars.get(name));
+        return VarWrapper.optionalFilePath(lookupVar(name));
     }
 
     public Optional<Integer> getVarInt(final String name) {
-        return VarWrapper.optionalInt(vars.get(name));
+        return VarWrapper.optionalInt(lookupVar(name));
     }
 
     public Optional<Double> getVarDouble(final String name) {
-        return VarWrapper.optionalDouble(vars.get(name));
+        return VarWrapper.optionalDouble(lookupVar(name));
+    }
+
+    private String lookupVar(final String name) {
+        if (vars.containsKey(name) || parentPath.isEmpty()) {
+            return vars.get(name);
+        }
+        val parentVarVal = environment.getItem(parentPath).lookupVar(name);
+        vars.put(name, parentVarVal);
+        return parentVarVal;
+    }
+
+    private void lookUpVars(final DmeItem item, final DmeItem parent) {
+        if (parent != null) {
+            if (!parent.parentPath.isEmpty()) {
+                lookUpVars(parent, environment.getItem(parent.parentPath));
+            }
+            parent.getVars().forEach(item.getVars()::putIfAbsent);
+        }
     }
 }

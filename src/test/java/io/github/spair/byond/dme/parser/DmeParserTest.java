@@ -29,6 +29,11 @@ public class DmeParserTest {
         assertNotNull(item);
         assertEquals("1", item.getVar("custom_var"));
         assertEquals("/obj", item.getParentPath());
+        assertEquals("3", item.getVar("layer"));
         assertTrue(item.getSubtypes().isEmpty());
+
+        assertEquals(2, item.getVars().size());
+        assertEquals(48, item.getAllVars().size());
+        assertEquals(48, item.getVars().size());
     }
 }
