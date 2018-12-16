@@ -52,7 +52,7 @@ final class PostParser {
         }
     }
 
-    // Makes parents to know about every existed subtype.
+    // Makes parents to know about every subtype.
     private void assignAllSubtypesFromRoots() {
         for (val root : roots) {
             setAndReturnAllSubtypes(root);
@@ -73,7 +73,7 @@ final class PostParser {
 
     private void replaceGlobalVarsInItemWithValues(final DmeItem item) {
         for (val varEntry : item.getVars().entrySet()) {
-            item.setVar(varEntry.getKey(), WordDefineChecker.check(varEntry.getValue(), globalVars));
+            item.setVar(varEntry.getKey(), WordReplacer.replace(varEntry.getValue(), globalVars));
         }
     }
 

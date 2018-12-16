@@ -113,7 +113,7 @@ final class Parser {
 
                 if (value != null) {
                     final String varName = varMatcher.group(1);
-                    dmeItem.setVar(varName, WordDefineChecker.check(value, macroses));
+                    dmeItem.setVar(varName, WordReplacer.replace(value, macroses));
                 } else {
                     dmeItem.setEmptyVar(varMatcher.group(3));
                 }
@@ -126,7 +126,7 @@ final class Parser {
 
         if (matcher.find() && matcher.group(2) != null) {
             String macrosValue = matcher.group(2).replace("$", "\\$");
-            dme.addMacros(matcher.group(1), WordDefineChecker.check(macrosValue, dme.getMacroses()));
+            dme.addMacros(matcher.group(1), WordReplacer.replace(macrosValue, dme.getMacroses()));
         }
     }
 
