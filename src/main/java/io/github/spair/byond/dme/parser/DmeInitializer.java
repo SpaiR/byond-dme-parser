@@ -89,7 +89,7 @@ final class DmeInitializer {
                 if (stringValue.startsWith(LIST)) {
                     item.setVar(name, stringValue);
                 } else {
-                    item.setQuotedVar(name, stringValue);
+                    item.setVarText(name, stringValue);
                 }
             } else {
                 throw new IllegalArgumentException(

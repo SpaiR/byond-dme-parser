@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class PostParserTest {
 
     @Test
@@ -16,10 +15,10 @@ public class PostParserTest {
         PostParser.parse(dme);
 
         DmeItem datum = dme.getItem("/datum");
-        assertEquals("456", datum.getVar("datumVar").get());
-        assertEquals("6.0", datum.getVar("expressionVar").get());
-        assertEquals("\"2 + 4\"", datum.getVar("stringVarWithExpression").get());
-        assertEquals("2 + letters", datum.getVar("expressionWithLetters").get());
+        assertEquals("456", datum.getVar("datumVar"));
+        assertEquals("6.0", datum.getVar("expressionVar"));
+        assertEquals("\"2 + 4\"", datum.getVar("stringVarWithExpression"));
+        assertEquals("2 + letters", datum.getVar("expressionWithLetters"));
         assertEquals(4, datum.getVars().size());
         assertEquals(5, datum.getSubtypes().size());
         assertTrue(datum.getSubtypes().contains("/atom"));
@@ -29,11 +28,11 @@ public class PostParserTest {
         assertTrue(datum.getSubtypes().contains("/atom/intermediate/child"));
 
         DmeItem atom = dme.getItem("/atom");
-        assertEquals("value1", atom.getVar("var1").get());
-        assertEquals("\"We have TEXT in the NORTH dir\"", atom.getVar("textVar").get());
-        assertEquals("Some TEXT goes here", atom.getVar("macrosVar").get());
-        assertEquals("Current dir is 1", atom.getVar("globalVar").get());
-        assertEquals("456", atom.getVar("datumVar").get());
+        assertEquals("value1", atom.getVar("var1"));
+        assertEquals("\"We have TEXT in the NORTH dir\"", atom.getVar("textVar"));
+        assertEquals("Some TEXT goes here", atom.getVar("macrosVar"));
+        assertEquals("Current dir is 1", atom.getVar("globalVar"));
+        assertEquals("456", atom.getVar("datumVar"));
         assertEquals(8, atom.getVars().size());
         assertEquals("/datum", atom.getParentPath());
         assertEquals(4, atom.getSubtypes().size());
@@ -45,12 +44,12 @@ public class PostParserTest {
         assertNotNull(dme.getItem("/atom/intermediate"));
 
         DmeItem child = dme.getItem("/atom/child");
-        assertEquals("456", child.getVar("datumVar").get());
-        assertEquals("value2", child.getVar("var2").get());
+        assertEquals("456", child.getVar("datumVar"));
+        assertEquals("value2", child.getVar("var2"));
 
         DmeItem grandchild = dme.getItem("/atom/child/grandchild");
-        assertEquals("value2-3", grandchild.getVar("var1").get());
-        assertEquals("value2", grandchild.getVar("var2").get());
+        assertEquals("value2-3", grandchild.getVar("var1"));
+        assertEquals("value2", grandchild.getVar("var2"));
     }
 
     private Dme prepareDme() {
@@ -64,7 +63,7 @@ public class PostParserTest {
         DmeItem datum = new DmeItem("/datum", dme);
         datum.setVar("datumVar", "456");
         datum.setVar("expressionVar", "2 + 4");
-        datum.setQuotedVar("stringVarWithExpression", "2 + 4");
+        datum.setVarText("stringVarWithExpression", "2 + 4");
         datum.setVar("expressionWithLetters", "2 + letters");
         dme.addItem(datum);
 
@@ -72,7 +71,7 @@ public class PostParserTest {
         atom.setVar("var1", "value1");
         atom.setVar("macrosVar", "Some TEXT goes here");
         atom.setVar("globalVar", "Current dir is NORTH");
-        atom.setQuotedVar("textVar", "We have TEXT in the NORTH dir");
+        atom.setVarText("textVar", "We have TEXT in the NORTH dir");
         dme.addItem(atom);
 
         DmeItem atomChild = new DmeItem("/atom/child", dme);

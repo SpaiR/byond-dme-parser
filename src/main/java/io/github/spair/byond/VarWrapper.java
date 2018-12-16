@@ -4,20 +4,44 @@ import java.util.Optional;
 
 public final class VarWrapper {
 
-    public static Optional<String> optionalNullable(final String var) {
-        return Optional.ofNullable(var);
+    public static String rawValue(final String var) {
+        return var == null ? ByondTypes.NULL : var;
     }
 
-    public static Optional<String> optionalUnquoted(final String var) {
-        return isEmptyVar(var) ? Optional.empty() : Optional.of(var.substring(1, var.length() - 1));
+    public static Optional<String> optionalText(final String var) {
+        if (isEmptyVar(var)) {
+            return Optional.empty();
+        }
+        if (var.startsWith("\"") && var.endsWith("\"")) {
+            return Optional.of(var.substring(1, var.length() - 1));
+        }
+        return Optional.of(var);
+    }
+
+    public static Optional<String> optionalFilePath(final String var) {
+        if (isEmptyVar(var)) {
+            return Optional.empty();
+        }
+        if (var.startsWith("'") && var.endsWith("'")) {
+            return Optional.of(var.substring(1, var.length() - 1));
+        }
+        return Optional.of(var);
     }
 
     public static Optional<Integer> optionalInt(final String var) {
-        return isEmptyVar(var) ? Optional.empty() : Optional.of(Integer.parseInt(var));
+        try {
+            return isEmptyVar(var) ? Optional.empty() : Optional.of(Integer.parseInt(var));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     public static Optional<Double> optionalDouble(final String var) {
-        return isEmptyVar(var) ? Optional.empty() : Optional.of(Double.parseDouble(var));
+        try {
+            return isEmptyVar(var) ? Optional.empty() : Optional.of(Double.parseDouble(var));
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     private static boolean isEmptyVar(final String var) {

@@ -20,7 +20,7 @@ public class DmeParserTest {
 
         DmeItem item = dme.getItem("/obj/item");
         assertNotNull(item);
-        assertEquals("1", item.getVar("custom_var").get());
+        assertEquals("1", item.getVar("custom_var"));
         assertEquals("/obj", item.getParentPath());
         assertTrue(item.getSubtypes().isEmpty());
 

@@ -1,9 +1,9 @@
 package io.github.spair.byond;
 
 /**
- * Constants with BYOND types.
+ * Constants with general BYOND types.
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
+@SuppressWarnings("unused")
 public final class ByondTypes {
 
     public static final String NULL = "null";

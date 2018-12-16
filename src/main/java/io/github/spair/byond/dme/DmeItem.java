@@ -4,7 +4,6 @@ import io.github.spair.byond.ByondTypes;
 import io.github.spair.byond.VarWrapper;
 import lombok.Data;
 import lombok.ToString;
-import lombok.Setter;
 import lombok.Getter;
 import lombok.EqualsAndHashCode;
 import lombok.AccessLevel;
@@ -21,37 +20,55 @@ import java.util.Optional;
 @SuppressWarnings("WeakerAccess")
 public class DmeItem {
 
-    @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
-    private Dme environment;
+    private final Dme environment;
 
     private String type;
-    private Map<String, String> vars = new HashMap<>();
     private String parentPath = "";
-    private Set<String> subtypes = new HashSet<>();
+
+    private final Map<String, String> vars = new HashMap<>();
+    private final Set<String> subtypes = new HashSet<>();
 
     public DmeItem(final String type, final Dme environment) {
         this.type = type;
         this.environment = environment;
     }
 
+    ///////////////// Types / Subtypes
+
+    public void addSubtype(final DmeItem item) {
+        subtypes.add(item.getType());
+    }
+
+    public void addSubtype(final String subtypePath) {
+        subtypes.add(subtypePath);
+    }
+
     public boolean isType(final String typeToCompare) {
-        boolean result = type.equals(typeToCompare);
-
-        if (!result) {
+        boolean isEqualTypes = type.equals(typeToCompare);
+        if (!isEqualTypes) {
             DmeItem itemToCompare = environment.getItem(typeToCompare);
-            result = (itemToCompare != null && itemToCompare.subtypes.contains(type));
+            isEqualTypes = (itemToCompare != null && itemToCompare.subtypes.contains(type));
         }
-
-        return result;
+        return isEqualTypes;
     }
 
     public boolean isType(final DmeItem item) {
         return isType(item.getType());
     }
 
+    ///////////////// Variables
+
     public void setVar(final String name, final String value) {
         vars.put(name, value);
+    }
+
+    public void setVarText(final String name, final String value) {
+        vars.put(name, '"' + value + '"');
+    }
+
+    public void setVarFilePath(final String name, final String value) {
+        vars.put(name, "'" + value + "'");
     }
 
     public void setVar(final String name, final Number value) {
@@ -62,44 +79,23 @@ public class DmeItem {
         vars.put(name, ByondTypes.NULL);
     }
 
-    /**
-     * Method wraps variable in double quotes and then puts it in current item.
-     *
-     * @param name variable name to add
-     * @param value variable value to wrap and add
-     */
-    public void setQuotedVar(final String name, final Object value) {
-        vars.put(name, '"' + value.toString() + '"');
+    public String getVar(final String name) {
+        return VarWrapper.rawValue(vars.get(name));
     }
 
-    public Optional<String> getVar(final String name) {
-        return VarWrapper.optionalNullable(vars.get(name));
+    public Optional<String> getVarText(final String name) {
+        return VarWrapper.optionalText(vars.get(name));
     }
 
-    /**
-     * Method returns variable without first and last character.
-     * It's implied that those chars will be single or double quotes.
-     *
-     * @param name variable name to get
-     * @return unwrapped variable
-     */
-    public Optional<String> getVarUnquoted(final String name) {
-        return VarWrapper.optionalUnquoted(vars.get(name));
+    public Optional<String> getVarFilePath(final String name) {
+        return VarWrapper.optionalFilePath(vars.get(name));
     }
 
-    public Optional<Integer> getVarAsInt(final String name) {
+    public Optional<Integer> getVarInt(final String name) {
         return VarWrapper.optionalInt(vars.get(name));
     }
 
-    public Optional<Double> getVarAsDouble(final String name) {
+    public Optional<Double> getVarDouble(final String name) {
         return VarWrapper.optionalDouble(vars.get(name));
-    }
-
-    public void addSubtype(final DmeItem item) {
-        subtypes.add(item.getType());
-    }
-
-    public void addSubtype(final String subtypePath) {
-        subtypes.add(subtypePath);
     }
 }
