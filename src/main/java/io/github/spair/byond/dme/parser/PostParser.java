@@ -83,10 +83,19 @@ final class PostParser {
             if (noLetterMarkers(value) && hasMathMarkers(value)) {
                 try {
                     double newValue = new Expression(value).eval().doubleValue();
-                    item.setVar(varEntry.getKey(), newValue);
+                    item.setVar(varEntry.getKey(), getDoubleOrLong(newValue));
                 } catch (Exception ignored) {
                 }
             }
+        }
+    }
+
+    private static Number getDoubleOrLong(final double number) {
+        val longNum = (long) number;
+        if (longNum == number) {
+            return longNum;
+        } else {
+            return number;
         }
     }
 

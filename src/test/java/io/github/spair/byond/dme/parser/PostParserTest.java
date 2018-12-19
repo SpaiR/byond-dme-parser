@@ -16,7 +16,7 @@ public class PostParserTest {
 
         DmeItem datum = dme.getItem("/datum");
         assertEquals("456", datum.getVar("datumVar"));
-        assertEquals("6.0", datum.getVar("expressionVar"));
+        assertEquals("6", datum.getVar("expressionVar"));
         assertEquals("\"2 + 4\"", datum.getVar("stringVarWithExpression"));
         assertEquals("2 + letters", datum.getVar("expressionWithLetters"));
         assertEquals(4, datum.getVars().size());
