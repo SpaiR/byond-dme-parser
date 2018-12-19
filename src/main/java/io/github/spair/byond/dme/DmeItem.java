@@ -5,6 +5,7 @@ import io.github.spair.byond.VarWrapper;
 import lombok.Data;
 import lombok.ToString;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.EqualsAndHashCode;
 import lombok.AccessLevel;
 import lombok.val;
@@ -16,8 +17,8 @@ import java.util.HashSet;
 import java.util.Optional;
 
 @Data
-@ToString(exclude = "environment")
-@EqualsAndHashCode(exclude = "environment")
+@ToString(exclude = {"environment", "varsLookedUp"})
+@EqualsAndHashCode(exclude = {"environment", "varsLookedUp"})
 @SuppressWarnings("WeakerAccess")
 public class DmeItem {
 
@@ -31,6 +32,7 @@ public class DmeItem {
     private final Set<String> subtypes = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private boolean varsLookedUp = false;
 
     public DmeItem(final String type, final Dme environment) {
@@ -85,7 +87,9 @@ public class DmeItem {
 
     public Map<String, String> getAllVars() {
         if (!varsLookedUp && !parentPath.isEmpty()) {
-            lookUpVars(this, environment.getItem(parentPath));
+            Map<String, String> varsMap = new HashMap<>();
+            lookUpVars(varsMap, environment.getItem(parentPath));
+            varsMap.forEach(vars::putIfAbsent);
             varsLookedUp = true;
         }
         return vars;
@@ -120,12 +124,12 @@ public class DmeItem {
         return parentVarVal;
     }
 
-    private void lookUpVars(final DmeItem item, final DmeItem parent) {
+    private void lookUpVars(final Map<String, String> varsMap, final DmeItem parent) {
         if (parent != null) {
-            if (!parent.parentPath.isEmpty()) {
-                lookUpVars(parent, environment.getItem(parent.parentPath));
+            parent.vars.forEach(varsMap::putIfAbsent);
+            if (!parent.varsLookedUp && !parent.parentPath.isEmpty()) {
+                lookUpVars(varsMap, environment.getItem(parent.parentPath));
             }
-            parent.getVars().forEach(item.getVars()::putIfAbsent);
         }
     }
 }

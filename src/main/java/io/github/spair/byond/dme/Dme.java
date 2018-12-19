@@ -104,11 +104,11 @@ public class Dme {
         mapFiles.add(filePath);
     }
 
+    ///////////////// Item
+
     public void addItem(final DmeItem item) {
         items.put(item.getType(), item);
     }
-
-    ///////////////// Item
 
     public DmeItem getItemOrCreate(final String type) {
         return items.computeIfAbsent(type, k -> new DmeItem(type, this));
