@@ -17,7 +17,7 @@ public class DmeParserTest {
         Dme dme = DmeParser.parse(testDmeFile);
 
         assertEquals(64, dme.getMacroses().size());
-        assertEquals(17, dme.getItems().size());
+        assertEquals(18, dme.getItems().size());
         assertEquals(3, dme.getIncludedFiles().size());
         assertEquals(3, dme.getMapFiles().size());
         assertEquals(77, dme.getGlobalVars().size());

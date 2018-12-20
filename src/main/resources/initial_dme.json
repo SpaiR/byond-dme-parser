@@ -254,6 +254,12 @@
       }
     },
     {
+      "type": "/image",
+      "parent": "",
+      "subtypes": [],
+      "vars": {}
+    },
+    {
       "type": "/mutable_appearance",
       "parent": "/image",
       "subtypes": [],
