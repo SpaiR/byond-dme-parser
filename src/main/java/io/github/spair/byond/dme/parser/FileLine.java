@@ -1,8 +1,8 @@
 package io.github.spair.byond.dme.parser;
 
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 final class FileLine {
 
     private static final int NO_INDENT = -1;
