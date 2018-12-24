@@ -34,6 +34,34 @@ Project parsing process should be started from the root `.dme` file.
 
 `Dme dme = DmeParser.parse(new File(${path/to/root/dme/file}));`
 
+Also `Dme` object has method to merge himself with provided json.
+
+JSON should have next format:
+```
+{
+  "macroses": {
+    "NUMBER_MACROS": 100,
+    "TEXT_MACROS": "{text}one hundred",     << this will result in quoted text
+    "RAW_MACROS": "one hundred"
+  },
+  "definitions": [
+    {
+      "type": "/obj",
+      "parent": "/datum",
+      "subtypes": [],
+      "vars": {
+        "number_var": 100,
+        "text_var": "{text}one hundred",    << this will result in quoted text
+        "raw_var": "one hundred"
+      }
+    }
+  ]
+}
+```
+
+Next fields for object definitions are mandatory: `type`, `parent`, `subtypes`, `vars`.
+If you don't wan't provide value to one of these field, it should still exist and have empty value (empty string for `type` and `parent`, empty array for `subtypes`, empty object for `vars`).
+
 More could be found in [JavaDoc](https://www.javadoc.io/doc/io.github.spair/byond-dme-parser).
 
 ## Credits
