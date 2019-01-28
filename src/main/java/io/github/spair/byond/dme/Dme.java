@@ -78,20 +78,44 @@ public class Dme {
         return VarWrapper.rawValue(macroses.get(name));
     }
 
-    public Optional<String> getMacrosText(final String name) {
+    public String getMacrosText(final String name) {
+        return VarWrapper.optionalText(macroses.get(name)).get();
+    }
+
+    public Optional<String> getMacrosTextSafe(final String name) {
         return VarWrapper.optionalText(macroses.get(name));
     }
 
-    public Optional<String> getMacrosFilePath(final String name) {
+    public String getMacrosFilePath(final String name) {
+        return VarWrapper.optionalFilePath(macroses.get(name)).get();
+    }
+
+    public Optional<String> getMacrosFilePathSafe(final String name) {
         return VarWrapper.optionalFilePath(macroses.get(name));
     }
 
-    public Optional<Integer> getMacrosInt(final String name) {
+    public Integer getMacrosInt(final String name) {
+        return VarWrapper.optionalInt(macroses.get(name)).get();
+    }
+
+    public Optional<Integer> getMacrosIntSafe(final String name) {
         return VarWrapper.optionalInt(macroses.get(name));
     }
 
-    public Optional<Double> getMacrosDouble(final String name) {
+    public Double getMacrosDouble(final String name) {
+        return VarWrapper.optionalDouble(macroses.get(name)).get();
+    }
+
+    public Optional<Double> getMacrosDoubleSafe(final String name) {
         return VarWrapper.optionalDouble(macroses.get(name));
+    }
+
+    public Boolean getMacrosBool(final String name) {
+        return getMacrosBoolSafe(name).get();
+    }
+
+    public Optional<Boolean> getMacrosBoolSafe(final String name) {
+        return VarWrapper.optionalBoolean(macroses.get(name));
     }
 
     ///////////////// Included / Map files
@@ -128,19 +152,43 @@ public class Dme {
         return VarWrapper.rawValue(getGlobalVars().get(name));
     }
 
-    public Optional<String> getGlobalVarText(final String name) {
+    public String getGlobalVarText(final String name) {
+        return VarWrapper.optionalText(getGlobalVars().get(name)).get();
+    }
+
+    public Optional<String> getGlobalVarTextSafe(final String name) {
         return VarWrapper.optionalText(getGlobalVars().get(name));
     }
 
-    public Optional<String> getGlobalFilePath(final String name) {
+    public String getGlobalFilePath(final String name) {
+        return VarWrapper.optionalFilePath(getGlobalVars().get(name)).get();
+    }
+
+    public Optional<String> getGlobalFilePathSafe(final String name) {
         return VarWrapper.optionalFilePath(getGlobalVars().get(name));
     }
 
-    public Optional<Integer> getGlobalVarInt(final String name) {
+    public Integer getGlobalVarInt(final String name) {
+        return VarWrapper.optionalInt(getGlobalVars().get(name)).get();
+    }
+
+    public Optional<Integer> getGlobalVarIntSafe(final String name) {
         return VarWrapper.optionalInt(getGlobalVars().get(name));
     }
 
-    public Optional<Double> getGlobalVarDouble(final String name) {
+    public Double getGlobalVarDouble(final String name) {
+        return VarWrapper.optionalDouble(getGlobalVars().get(name)).get();
+    }
+
+    public Optional<Double> getGlobalVarDoubleSafe(final String name) {
         return VarWrapper.optionalDouble(getGlobalVars().get(name));
+    }
+
+    public Boolean getGlobalVarBool(final String name) {
+        return getGlobalVarBoolSafe(name).get();
+    }
+
+    public Optional<Boolean> getGlobalVarBoolSafe(final String name) {
+        return VarWrapper.optionalBoolean(getGlobalVars().get(name));
     }
 }

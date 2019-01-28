@@ -44,6 +44,16 @@ public final class VarWrapper {
         }
     }
 
+    public static Optional<Boolean> optionalBoolean(final String var) {
+        if (var == null) {
+            return Optional.empty();
+        }
+        if (ByondTypes.NULL.equals(var) || var.isEmpty() || "\"\"".equals(var) || "0".equals(var)) {
+            return Optional.of(false);
+        }
+        return Optional.of(true);
+    }
+
     private static boolean isEmptyVar(final String var) {
         return var == null || ByondTypes.NULL.equals(var) || var.isEmpty();
     }

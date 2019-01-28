@@ -99,20 +99,44 @@ public class DmeItem {
         return VarWrapper.rawValue(lookupVar(name));
     }
 
-    public Optional<String> getVarText(final String name) {
+    public String getVarText(final String name) {
+        return getVarTextSafe(name).get();
+    }
+
+    public Optional<String> getVarTextSafe(final String name) {
         return VarWrapper.optionalText(lookupVar(name));
     }
 
-    public Optional<String> getVarFilePath(final String name) {
+    public String getVarFilePath(final String name) {
+        return getVarFilePathSafe(name).get();
+    }
+
+    public Optional<String> getVarFilePathSafe(final String name) {
         return VarWrapper.optionalFilePath(lookupVar(name));
     }
 
-    public Optional<Integer> getVarInt(final String name) {
+    public Integer getVarInt(final String name) {
+        return getVarIntSafe(name).get();
+    }
+
+    public Optional<Integer> getVarIntSafe(final String name) {
         return VarWrapper.optionalInt(lookupVar(name));
     }
 
-    public Optional<Double> getVarDouble(final String name) {
+    public Double getVarDouble(final String name) {
+        return getVarDoubleSafe(name).get();
+    }
+
+    public Optional<Double> getVarDoubleSafe(final String name) {
         return VarWrapper.optionalDouble(lookupVar(name));
+    }
+
+    public Boolean getVarBool(final String name) {
+        return getVarBoolSafe(name).get();
+    }
+
+    public Optional<Boolean> getVarBoolSafe(final String name) {
+        return VarWrapper.optionalBoolean(lookupVar(name));
     }
 
     private String lookupVar(final String name) {

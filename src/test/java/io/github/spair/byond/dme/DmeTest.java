@@ -20,7 +20,7 @@ public class DmeTest {
     @Test
     public void testMergeWithJsonWithOverride() {
         dme.getItemOrCreate("/obj").setVar("var", 1);
-        assertEquals(1, dme.getItem("/obj").getVarInt("var").get().intValue());
+        assertEquals(1, dme.getItem("/obj").getVarIntSafe("var").get().intValue());
 
         dme.mergeWithJson("{\n" +
                 "  \"definitions\": [\n" +
@@ -35,7 +35,7 @@ public class DmeTest {
                 "  ]\n" +
                 "}"
         );
-        assertEquals(2, dme.getItem("/obj").getVarInt("var").get().intValue());
+        assertEquals(2, dme.getItem("/obj").getVarIntSafe("var").get().intValue());
     }
 
     @Test
@@ -77,9 +77,9 @@ public class DmeTest {
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
     private void commonAssert() {
-        assertEquals(100, dme.getMacrosInt("NUMBER_MACROS").get().longValue());
+        assertEquals(100, dme.getMacrosInt("NUMBER_MACROS").longValue());
         assertEquals("\"one hundred\"", dme.getMacros("TEXT_MACROS"));
-        assertEquals("one hundred", dme.getMacrosText("TEXT_MACROS").get());
+        assertEquals("one hundred", dme.getMacrosText("TEXT_MACROS"));
         assertEquals("one hundred", dme.getMacros("RAW_MACROS"));
 
         val item = dme.getItem("/obj");
@@ -88,9 +88,9 @@ public class DmeTest {
         assertEquals("/datum", item.getParentPath());
         assertTrue(item.getSubtypes().isEmpty());
 
-        assertEquals(100, item.getVarInt("number_var").get().longValue());
+        assertEquals(100, item.getVarIntSafe("number_var").get().longValue());
         assertEquals("\"one hundred\"", item.getVar("text_var"));
-        assertEquals("one hundred", item.getVarText("text_var").get());
+        assertEquals("one hundred", item.getVarTextSafe("text_var").get());
         assertEquals("one hundred", item.getVar("raw_var"));
     }
 }
