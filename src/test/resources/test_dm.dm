@@ -1,5 +1,6 @@
 /obj/item
     var/custom_var
+    var/macros_var = NO_STEPS
 
 // Comment
 ///****

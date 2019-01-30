@@ -3,8 +3,9 @@ package io.github.spair.byond.dme.parser;
 import io.github.spair.byond.ByondFiles;
 import io.github.spair.byond.ByondTypes;
 import io.github.spair.byond.dme.Dme;
-import io.github.spair.byond.dme.DmeItem;
 import lombok.Getter;
+import lombok.val;
+import lombok.var;
 
 import java.io.File;
 import java.util.Map;
@@ -96,8 +97,26 @@ final class Parser {
                     continue;
                 }
 
-                addNewMacrosValueIfExist(lineText);
-                parseIncludedFileIfExist(lineText, file);
+                // Add new macros value if exists
+                val macrosMatcher = define.matcher(lineText);
+                if (macrosMatcher.find() && macrosMatcher.group(2) != null) {
+                    val macrosValue = macrosMatcher.group(2).replace("$", "\\$");
+                    macroses.put(macrosMatcher.group(1), WordReplacer.replace(macrosValue, macroses));
+                }
+
+                // Parse included file if exist
+                val fileMatcher = include.matcher(lineText);
+                if (fileMatcher.find()) {
+                    val filePath = fileMatcher.group(1).replace('\\', File.separatorChar);
+                    val fullFilePath = file.getParentFile().getAbsolutePath().concat(File.separator).concat(filePath);
+
+                    if (filePath.endsWith(ByondFiles.DMM_SUFFIX)) {
+                        dme.addMapFile(fullFilePath);
+                    } else {
+                        dme.addIncludedFile(fullFilePath);
+                        parseFile(new File(fullFilePath));
+                    }
+                }
 
                 continue;
             }
@@ -105,14 +124,14 @@ final class Parser {
             final String fullPath = formFullPath(line);
             final String type = formTypeName(fullPath);
 
-            DmeItem dmeItem = dme.getItemOrCreate(type);
-            Matcher varMatcher = varDefinition.matcher(fullPath);
+            val dmeItem = dme.getItemOrCreate(type);
+            val varMatcher = varDefinition.matcher(fullPath);
 
             if (varMatcher.find()) {
-                final String value = varMatcher.group(2);
+                val value = varMatcher.group(2);
 
                 if (value != null) {
-                    final String varName = varMatcher.group(1);
+                    val varName = varMatcher.group(1);
                     dmeItem.setVar(varName, WordReplacer.replace(value, macroses));
                 } else {
                     dmeItem.setEmptyVar(varMatcher.group(3));
@@ -121,44 +140,16 @@ final class Parser {
         }
     }
 
-    private void addNewMacrosValueIfExist(final String lineText) {
-        Matcher matcher = define.matcher(lineText);
-
-        if (matcher.find() && matcher.group(2) != null) {
-            String macrosValue = matcher.group(2).replace("$", "\\$");
-            dme.addMacros(matcher.group(1), WordReplacer.replace(macrosValue, dme.getMacroses()));
-        }
-    }
-
-    private void parseIncludedFileIfExist(final String lineText, final File currentFile) {
-        Matcher matcher = include.matcher(lineText);
-
-        if (matcher.find()) {
-            String filePath = matcher.group(1).replace('\\', File.separatorChar);
-            String fullFilePath = currentFile.getParentFile().getAbsolutePath() + File.separator + filePath;
-
-            if (filePath.endsWith(ByondFiles.DMM_SUFFIX)) {
-                dme.addMapFile(fullFilePath);
-            } else {
-                dme.addIncludedFile(fullFilePath);
-                parseFile(new File(fullFilePath));
-            }
-        }
-    }
-
-    private void checkPathTreeSize(final int expectedSize) {
+    private String formFullPath(final FileLine line) {
+        val expectedSize = line.getIndentLevel() + 1;
         if (pathTree.length < expectedSize) {
-            String[] newPathTree = new String[expectedSize];
+            val newPathTree = new String[expectedSize];
             System.arraycopy(pathTree, 0, newPathTree, 0, pathTree.length);
             pathTree = newPathTree;
         }
-    }
-
-    private String formFullPath(final FileLine line) {
-        checkPathTreeSize(line.getIndentLevel() + 1);
 
         pathTree[line.getIndentLevel()] = line.getText();
-        StringBuilder fullPath = new StringBuilder();
+        var fullPath = new StringBuilder();
 
         for (int i = 0; i < line.getIndentLevel() + 1; i++) {
             String item = pathTree[i];
@@ -176,9 +167,9 @@ final class Parser {
     }
 
     private String formTypeName(final String fullPath) {
-        StringBuilder typeName = new StringBuilder();
+        val typeName = new StringBuilder();
 
-        for (String pathPart : fullPath.split("/")) {
+        for (val pathPart : fullPath.split("/")) {
             if (pathPart.isEmpty()) {
                 continue;
             } else if (notPartOfTypeName(pathPart)) {

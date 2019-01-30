@@ -36,24 +36,42 @@ final class PostParser {
         for (val itemEntry : dme.getItems().entrySet()) {
             val item = itemEntry.getValue();
             if (!ByondTypes.GLOBAL.equals(itemEntry.getKey())) {
-                assignParent(item);
-                replaceGlobalVarsInItemWithValues(item);
-                evaluateMathExpressionIfExist(item);
-                addToRootsIfAble(item);
+                // Assign parent
+                if (hasParent(item.getType())) {
+                    connectParentAndChild(determineParent(item.getType()), item);
+                }
+
+                // Replace global vars in item with values
+                for (val varEntry : item.getVars().entrySet()) {
+                    item.setVar(varEntry.getKey(), WordReplacer.replace(varEntry.getValue(), globalVars));
+                }
+
+                // Evaluate math expressions
+                for (val varEntry : item.getVars().entrySet()) {
+                    val value = varEntry.getValue();
+                    if (noLetterMarkers(value) && hasMathMarkers(value)) {
+                        try {
+                            double newValue = new Expression(value).eval().doubleValue();
+                            item.setVar(varEntry.getKey(), getDoubleOrLong(newValue));
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+
+                // Add to roots if able
+                if (item.getParentPath().equals(ByondTypes.DATUM) || item.getType().equals(ByondTypes.DATUM)) {
+                    roots.add(item);
+                }
             }
         }
-        addAdditionalItemsToDme();
-        assignAllSubtypesFromRoots();
-    }
 
-    private void assignParent(final DmeItem item) {
-        if (hasParent(item.getType())) {
-            connectParentAndChild(determineParent(item.getType()), item);
+        // During parent determining additional items are created. They are not declared in project,
+        // and exist in form of intermediate objects, but they should exist in Dme.
+        for (val dmeItem : additionalCreatedItems.values()) {
+            dme.addItem(dmeItem);
         }
-    }
 
-    // Makes parents to know about every subtype.
-    private void assignAllSubtypesFromRoots() {
+        // Makes parents to know about every subtype.
         for (val root : roots) {
             setAndReturnAllSubtypes(root);
         }
@@ -69,25 +87,6 @@ final class PostParser {
         itemSubtypes.addAll(tempSubtypes);
 
         return itemSubtypes;
-    }
-
-    private void replaceGlobalVarsInItemWithValues(final DmeItem item) {
-        for (val varEntry : item.getVars().entrySet()) {
-            item.setVar(varEntry.getKey(), WordReplacer.replace(varEntry.getValue(), globalVars));
-        }
-    }
-
-    private void evaluateMathExpressionIfExist(final DmeItem item) {
-        for (val varEntry : item.getVars().entrySet()) {
-            val value = varEntry.getValue();
-            if (noLetterMarkers(value) && hasMathMarkers(value)) {
-                try {
-                    double newValue = new Expression(value).eval().doubleValue();
-                    item.setVar(varEntry.getKey(), getDoubleOrLong(newValue));
-                } catch (Exception ignored) {
-                }
-            }
-        }
     }
 
     private static Number getDoubleOrLong(final double number) {
@@ -146,12 +145,6 @@ final class PostParser {
         }
     }
 
-    private void addToRootsIfAble(final DmeItem item) {
-        if (item.getParentPath().equals(ByondTypes.DATUM) || item.getType().equals(ByondTypes.DATUM)) {
-            roots.add(item);
-        }
-    }
-
     private boolean hasParent(final String type) {
         return !(ByondTypes.DATUM.equals(type)
                 || ByondTypes.CLIENT.equals(type)
@@ -159,13 +152,5 @@ final class PostParser {
                 || ByondTypes.LIST.equals(type)
                 || ByondTypes.SAVEFILE.equals(type)
         );
-    }
-
-    // During parent determining additional items are created. They are not declared in project,
-    // and exist in form of intermediate objects, but they should exist in Dme.
-    private void addAdditionalItemsToDme() {
-        for (val dmeItem : additionalCreatedItems.values()) {
-            dme.addItem(dmeItem);
-        }
     }
 }
