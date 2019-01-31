@@ -55,35 +55,43 @@ final class DmeJsonMerger {
             val defObject = definition.asObject();
 
             val type = defObject.get(TYPE_PROP).asString();
-            val parent = defObject.get(PARENT_PROP).asString();
-            val subtypes = defObject.get(SUBTYPES_PROP).asArray();
-            val vars = defObject.get(VARS_PROP).asObject();
+            val parent = defObject.get(PARENT_PROP);
+            val subtypes = defObject.get(SUBTYPES_PROP);
+            val vars = defObject.get(VARS_PROP);
 
             val item = dme.getItemOrCreate(type);
-            item.setParentPath(parent);
 
-            for (val subtype : subtypes) {
-                item.addSubtype(subtype.asString());
+            if (parent != null) {
+                item.setParentPath(parent.asString());
             }
-            for (val var : vars) {
-                val name = var.getName();
-                val value = var.getValue();
 
-                if (value.isNull()) {
-                    item.setEmptyVar(name);
-                } else if (value.isNumber()) {
-                    item.setVar(name, getNumberFromValue(value));
-                } else if (value.isString()) {
-                    val valueString = value.asString();
-                    if (valueString.startsWith(TEXT_TYPE)) {
-                        item.setVarText(name, valueString.substring(TEXT_TYPE.length()));
+            if (subtypes != null) {
+                for (val subtype : subtypes.asArray()) {
+                    item.addSubtype(subtype.asString());
+                }
+            }
+
+            if (vars != null) {
+                for (val var : vars.asObject()) {
+                    val name = var.getName();
+                    val value = var.getValue();
+
+                    if (value.isNull()) {
+                        item.setEmptyVar(name);
+                    } else if (value.isNumber()) {
+                        item.setVar(name, getNumberFromValue(value));
+                    } else if (value.isString()) {
+                        val valueString = value.asString();
+                        if (valueString.startsWith(TEXT_TYPE)) {
+                            item.setVarText(name, valueString.substring(TEXT_TYPE.length()));
+                        } else {
+                            item.setVar(name, valueString);
+                        }
+                    } else if (value.isBoolean()) {
+                        item.setVar(name, String.valueOf(value.asBoolean()));
                     } else {
-                        item.setVar(name, valueString);
+                        throw new IllegalArgumentException("Unknown type of variable found in JSON. Name: " + name + ", value: " + value);
                     }
-                } else if (value.isBoolean()) {
-                    item.setVar(name, String.valueOf(value.asBoolean()));
-                } else {
-                    throw new IllegalArgumentException("Unknown type of variable found in JSON. Name: " + name + ", value: " + value);
                 }
             }
         }
