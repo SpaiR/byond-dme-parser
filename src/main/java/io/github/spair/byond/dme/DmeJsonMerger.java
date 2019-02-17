@@ -67,7 +67,8 @@ final class DmeJsonMerger {
 
             if (subtypes != null) {
                 for (val subtype : subtypes.asArray()) {
-                    item.addSubtype(subtype.asString());
+                    item.addToAllSubtype(subtype.asString());
+                    item.addDirectSubtype(subtype.asString());
                 }
             }
 

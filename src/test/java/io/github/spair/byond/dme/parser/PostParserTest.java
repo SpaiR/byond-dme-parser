@@ -20,12 +20,12 @@ public class PostParserTest {
         assertEquals("\"2 + 4\"", datum.getVar("stringVarWithExpression"));
         assertEquals("2 + letters", datum.getVar("expressionWithLetters"));
         assertEquals(4, datum.getVars().size());
-        assertEquals(5, datum.getSubtypes().size());
-        assertTrue(datum.getSubtypes().contains("/atom"));
-        assertTrue(datum.getSubtypes().contains("/atom/child"));
-        assertTrue(datum.getSubtypes().contains("/atom/child/grandchild"));
-        assertTrue(datum.getSubtypes().contains("/atom/intermediate"));
-        assertTrue(datum.getSubtypes().contains("/atom/intermediate/child"));
+        assertEquals(5, datum.getAllSubtypes().size());
+        assertTrue(datum.getAllSubtypes().contains("/atom"));
+        assertTrue(datum.getAllSubtypes().contains("/atom/child"));
+        assertTrue(datum.getAllSubtypes().contains("/atom/child/grandchild"));
+        assertTrue(datum.getAllSubtypes().contains("/atom/intermediate"));
+        assertTrue(datum.getAllSubtypes().contains("/atom/intermediate/child"));
 
         DmeItem atom = dme.getItem("/atom");
         assertEquals("value1", atom.getVar("var1"));
@@ -37,11 +37,11 @@ public class PostParserTest {
         assertEquals(8, atom.getAllVars().size());
         assertEquals(8, atom.getVars().size());
         assertEquals("/datum", atom.getParentPath());
-        assertEquals(4, atom.getSubtypes().size());
-        assertTrue(atom.getSubtypes().contains("/atom/child"));
-        assertTrue(atom.getSubtypes().contains("/atom/child/grandchild"));
-        assertTrue(atom.getSubtypes().contains("/atom/intermediate"));
-        assertTrue(atom.getSubtypes().contains("/atom/intermediate/child"));
+        assertEquals(4, atom.getAllSubtypes().size());
+        assertTrue(atom.getAllSubtypes().contains("/atom/child"));
+        assertTrue(atom.getAllSubtypes().contains("/atom/child/grandchild"));
+        assertTrue(atom.getAllSubtypes().contains("/atom/intermediate"));
+        assertTrue(atom.getAllSubtypes().contains("/atom/intermediate/child"));
 
         assertNotNull(dme.getItem("/atom/intermediate"));
 

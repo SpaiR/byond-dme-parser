@@ -79,7 +79,7 @@ final class PostParser {
 
     private Set<String> setAndReturnAllSubtypes(final DmeItem item) {
         Set<String> tempSubtypes = new HashSet<>();
-        Set<String> itemSubtypes = item.getSubtypes();
+        Set<String> itemSubtypes = item.getAllSubtypes();
 
         for (val subtype : itemSubtypes) {
             tempSubtypes.addAll(setAndReturnAllSubtypes(dme.getItem(subtype)));
@@ -121,6 +121,14 @@ final class PostParser {
 
         if (type.indexOf('/') != type.lastIndexOf('/')) {
             parentPath = type.substring(0, type.lastIndexOf('/'));
+        } else {
+            switch (type) {
+                case ByondTypes.AREA:
+                case ByondTypes.TURF:
+                case ByondTypes.OBJ:
+                case ByondTypes.MOB:
+                    parentPath = ByondTypes.ATOM;
+            }
         }
 
         DmeItem parent = dme.getItem(parentPath);
@@ -139,7 +147,8 @@ final class PostParser {
     }
 
     private void connectParentAndChild(final DmeItem parent, final DmeItem child) {
-        parent.addSubtype(child.getType());
+        parent.addToAllSubtype(child);
+        parent.addDirectSubtype(child);
         if (child.getParentPath().isEmpty()) {
             child.setParentPath(parent.getType());
         }

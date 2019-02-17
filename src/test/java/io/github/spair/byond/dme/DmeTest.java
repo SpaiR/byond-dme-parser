@@ -86,7 +86,7 @@ public class DmeTest {
 
         assertNotNull(item);
         assertEquals("/datum", item.getParentPath());
-        assertTrue(item.getSubtypes().isEmpty());
+        assertTrue(item.getAllSubtypes().isEmpty());
 
         assertEquals(100, item.getVarIntSafe("number_var").get().longValue());
         assertEquals("\"one hundred\"", item.getVar("text_var"));

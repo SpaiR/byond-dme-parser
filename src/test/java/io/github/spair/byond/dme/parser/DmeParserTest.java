@@ -6,6 +6,9 @@ import io.github.spair.byond.dme.ResourceUtil;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 import static org.junit.Assert.*;
 
@@ -24,6 +27,12 @@ public class DmeParserTest {
 
         assertEquals(dme.getAbsoluteRootPath(), testDmeFile.getParent());
 
+        DmeItem datum = dme.getItem("/datum");
+        assertEquals(new HashSet<>(Arrays.asList("/image", "/matrix", "/atom", "/exception", "/icon", "/mutable_appearance", "/regex", "/database", "/sound")), datum.getDirectSubtypes());
+
+        DmeItem atom = dme.getItem("/atom");
+        assertEquals(new HashSet<>(Arrays.asList("/atom/movable", "/mob", "/area", "/turf", "/obj")), atom.getDirectSubtypes());
+
         DmeItem item = dme.getItem("/obj/item");
 
         assertNotNull(item);
@@ -31,7 +40,8 @@ public class DmeParserTest {
         assertEquals("/obj", item.getParentPath());
         assertEquals("3", item.getVar("layer"));
         assertEquals("0", item.getVar("macros_var"));
-        assertTrue(item.getSubtypes().isEmpty());
+        assertTrue(item.getAllSubtypes().isEmpty());
+        assertTrue(item.getDirectSubtypes().isEmpty());
 
         assertEquals(3, item.getVars().size());
         assertEquals(49, item.getAllVars().size());

@@ -29,7 +29,8 @@ public class DmeItem {
     private String parentPath = "";
 
     private final Map<String, String> vars = new HashMap<>();
-    private final Set<String> subtypes = new HashSet<>();
+    private final Set<String> directSubtypes = new HashSet<>();
+    private final Set<String> allSubtypes = new HashSet<>();
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
@@ -42,19 +43,27 @@ public class DmeItem {
 
     ///////////////// Types / Subtypes
 
-    public void addSubtype(final DmeItem item) {
-        subtypes.add(item.getType());
+    public void addToAllSubtype(final DmeItem item) {
+        allSubtypes.add(item.getType());
     }
 
-    public void addSubtype(final String subtypePath) {
-        subtypes.add(subtypePath);
+    public void addToAllSubtype(final String subtypePath) {
+        allSubtypes.add(subtypePath);
+    }
+
+    public void addDirectSubtype(final DmeItem item) {
+        directSubtypes.add(item.getType());
+    }
+
+    public void addDirectSubtype(final String subtypePath) {
+        directSubtypes.add(subtypePath);
     }
 
     public boolean isType(final String typeToCompare) {
         boolean isEqualTypes = type.equals(typeToCompare);
         if (!isEqualTypes) {
             DmeItem itemToCompare = environment.getItem(typeToCompare);
-            isEqualTypes = (itemToCompare != null && itemToCompare.subtypes.contains(type));
+            isEqualTypes = (itemToCompare != null && itemToCompare.allSubtypes.contains(type));
         }
         return isEqualTypes;
     }
